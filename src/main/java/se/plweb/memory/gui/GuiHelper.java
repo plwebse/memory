@@ -14,8 +14,7 @@ public class GuiHelper {
         for (int value = 1; value <= totalNumberOfPairs; value++) {
             int color = getColorIndex(value);
             displayValues[color]++;
-            colorValues[getArrayIndex(value)] = new ColorValue(color,
-                    displayValues[color]);
+            colorValues[getArrayIndex(value)] = new ColorValue(color, displayValues[color]);
         }
     }
 
@@ -69,7 +68,10 @@ public class GuiHelper {
     }
 
     private enum ValueColor {
-        BLACK(Color.BLACK), RED(Color.RED), GREEN(Color.GREEN), BLUE(Color.BLUE);
+        BLACK(Color.BLACK),
+        RED(Color.RED),
+        GREEN(Color.GREEN),
+        BLUE(Color.BLUE);
 
         private Color color;
 

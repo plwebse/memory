@@ -18,10 +18,10 @@ public class GuiHelperTest extends TestCase {
     }
 
     public void test10x10() {
-        gameBoard.makeGameBoard(6, 6);
+        gameBoard.makeGameBoard(10, 10);
         guiHelper = GuiHelper.create(gameBoard.getTotalNumberOfPairs());
 
-        assertEquals(true, true);
+        assertEquals(13, guiHelper.getDisplayValue(49));
 
     }
 
