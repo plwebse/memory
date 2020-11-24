@@ -6,7 +6,7 @@ public enum GameObjectState {
 	DISABLED_STATE("disabled_state"),
 	MATCHED_STATE("matched_state");
 
-	private String toString;
+	private final String toString;
 
 	GameObjectState(String toString) {
 		this.toString = this.getClass().getName() + ":" + toString;

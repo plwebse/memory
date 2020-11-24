@@ -11,15 +11,15 @@ import javax.swing.JLabel;
 public class AboutTheGamePanel extends AbstractPanel {
 
 	private static final long serialVersionUID = 1L;
-	private GridBagLayout gblAbout = new GridBagLayout();
-	private JLabel lAbout = new JLabel("Made by Peter Lindblom 2010");
-	private JLabel lAboutUrl = new JLabel("http://www.plweb.se");
 
 	public AboutTheGamePanel() {
 
-		gblAbout.setConstraints(lAbout, fixLayout(0, 0));
+		JLabel lAbout = new JLabel("Made by Peter Lindblom 2010");
+		GridBagLayout gblAbout = new GridBagLayout();
+		gblAbout.setConstraints(lAbout, fixLayout(0));
 		this.add(lAbout);
-		gblAbout.setConstraints(lAboutUrl, fixLayout(0, 1));
+		JLabel lAboutUrl = new JLabel("http://www.plweb.se");
+		gblAbout.setConstraints(lAboutUrl, fixLayout(1));
 		this.add(lAboutUrl);
 		this.setLayout(gblAbout);
 	}

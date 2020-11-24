@@ -22,8 +22,8 @@ public abstract class AbstractThread implements Runnable {
 		return firstTime;
 	}
 
-	protected synchronized void setFirstTime(boolean firstTime) {
-		this.firstTime = firstTime;
+	protected synchronized void setFirstTime() {
+		this.firstTime = false;
 	}
 
 	public synchronized void stop() {

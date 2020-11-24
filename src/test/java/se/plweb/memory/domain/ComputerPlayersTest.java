@@ -11,14 +11,14 @@ public class ComputerPlayersTest extends TestCase {
 	GameBoard gameBoard = new GameBoardImpl();
 
 	@Override
-	protected void setUp() throws Exception {
+	protected void setUp() {
 		gameBoard = new GameBoardImpl();
 		gameBoard.makeGameBoard(10, 10);
 		gameBoard.startGame();
 	}
 
 	@Override
-	protected void tearDown() throws Exception {
+	protected void tearDown() {
 		gameBoard.stopGame();
 		gameBoard = null;
 	}

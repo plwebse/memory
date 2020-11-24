@@ -22,7 +22,7 @@ public class ThreadSinglePlayer extends AbstractThread implements Runnable {
 
         if (isFirstTime()) {
             thread.start();
-            setFirstTime(false);
+            setFirstTime();
         }
 
         if (!isRunning()) {

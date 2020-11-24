@@ -13,17 +13,17 @@ public class PlayerStatusPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JLabel playerName = new JLabel("", JLabel.CENTER);
-	private JLabel playerStatus = new JLabel("", JLabel.CENTER);
-	private JLabel playerPairStatus = new JLabel("0 / 0", JLabel.CENTER);
-	private JLabel playerAttempts = new JLabel("0", JLabel.CENTER);
-	private JLabel playerEmpty = new JLabel("", JLabel.CENTER);
+	private final JLabel playerStatus = new JLabel("", JLabel.CENTER);
+	private final JLabel playerPairStatus = new JLabel("0 / 0", JLabel.CENTER);
+	private final JLabel playerAttempts = new JLabel("0", JLabel.CENTER);
 
 	public PlayerStatusPanel(String name) {
+		JLabel playerName = new JLabel("", JLabel.CENTER);
 		this.add(playerName);
 		this.add(playerStatus);
 		this.add(playerPairStatus);
 		this.add(playerAttempts);
+		JLabel playerEmpty = new JLabel("", JLabel.CENTER);
 		this.add(playerEmpty);
 		this.add(playerEmpty);		
 		this.setLayout(new GridLayout(0, 1));

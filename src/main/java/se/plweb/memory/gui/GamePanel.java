@@ -12,7 +12,7 @@ public enum GamePanel {
 	, playerVsComputerPlayerPanel("playerVsComputerPlayerPanel")
 	, aboutTheGamePanel("aboutTheGamePanel");
 	
-	private String toString;
+	private final String toString;
 	
 	GamePanel(String toString) {
 		this.toString = toString;		

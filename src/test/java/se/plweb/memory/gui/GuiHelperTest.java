@@ -6,7 +6,7 @@ import se.plweb.memory.domain.GameBoardImpl;
 
 public class GuiHelperTest extends TestCase {
 
-    private GameBoard gameBoard = new GameBoardImpl();
+    private final GameBoard gameBoard = new GameBoardImpl();
     private GuiHelper guiHelper;
 
 

@@ -17,19 +17,11 @@ public class Gui extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	// global
-	private ThreadControl threadControl = ThreadControl.getInstance();
-	private Dimension minimumSize = new Dimension(800, 600);
+	private final ThreadControl threadControl = ThreadControl.getInstance();
 	// cardLayout
-	private JPanel pCards = new JPanel(new CardLayout());
-	private CardLayout cardLayout = (CardLayout) (pCards.getLayout());
+	private final JPanel pCards = new JPanel(new CardLayout());
+	private final CardLayout cardLayout = (CardLayout) (pCards.getLayout());
 	// meny
-	
-	private SinglePlayerPanel singlePlayerPanel = new SinglePlayerPanel(this);
-	private PlayerVsNetworkPlayerPanel playerVsNetworkPlayerPanel = new PlayerVsNetworkPlayerPanel(
-			this);
-	private PlayerVsCumputerPlayerPanel playerVsComputerPlayerPanel = new PlayerVsCumputerPlayerPanel(
-			this);
-	private AboutTheGamePanel aboutTheGamePanel = new AboutTheGamePanel();
 
 	// game panel
 	private GameSinglePlayer panelGameSinglePlayer = null;
@@ -40,17 +32,23 @@ public class Gui extends JFrame {
 	private static final String playerVsNetworkPlayerGameCard = "playerVsNetworkPlayerGameCard";
 	private static final String playerVsComputerPlayerGameCard = "playerVsComputerPlayerGameCard";
 
-	private GuiMenuBar guiMenuBar = new GuiMenuBar(this);
-	
 	public Gui(String jFrameTitle) {
+		GuiMenuBar guiMenuBar = new GuiMenuBar(this);
 		this.setJMenuBar(guiMenuBar);
 
+		SinglePlayerPanel singlePlayerPanel = new SinglePlayerPanel(this);
 		pCards.add(singlePlayerPanel, GamePanel.singlePlayerPanel.toString());
+		PlayerVsNetworkPlayerPanel playerVsNetworkPlayerPanel = new PlayerVsNetworkPlayerPanel(
+				this);
 		pCards.add(playerVsNetworkPlayerPanel, GamePanel.playerVsNetworkPlayerPanel.toString());
+		PlayerVsCumputerPlayerPanel playerVsComputerPlayerPanel = new PlayerVsCumputerPlayerPanel(
+				this);
 		pCards.add(playerVsComputerPlayerPanel, GamePanel.playerVsComputerPlayerPanel.toString());
+		AboutTheGamePanel aboutTheGamePanel = new AboutTheGamePanel();
 		pCards.add(aboutTheGamePanel, GamePanel.aboutTheGamePanel.toString());
 		pCards.setBorder(new BevelBorder(BevelBorder.LOWERED));
 
+		Dimension minimumSize = new Dimension(800, 600);
 		this.setSize(minimumSize);
 		this.setMinimumSize(minimumSize);
 		this.setPreferredSize(minimumSize);

@@ -10,94 +10,94 @@ public class GameObjectTest extends TestCase {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		GameObject t2 = GameObjectImpl.create(1, create(8, 9));
 
-		assertEquals(true, t1.hasTheSameValueAndNotTheSameCoordinates(t2));
+		assertTrue(t1.hasTheSameValueAndNotTheSameCoordinates(t2));
 	}
 
 	public void testhasTheSameValueAndNotTheSameCoordinates2() {
 		GameObject t1 = GameObjectImpl.create(1, create(8, 9));
 		GameObject t2 = GameObjectImpl.create(1, create(9, 9));
 
-		assertEquals(true, t1.hasTheSameValueAndNotTheSameCoordinates(t2));
+		assertTrue(t1.hasTheSameValueAndNotTheSameCoordinates(t2));
 	}
 
 	public void testhasTheSameValueAndNotTheSameCoordinates3() {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 8));
 		GameObject t2 = GameObjectImpl.create(1, create(9, 9));
 
-		assertEquals(true, t1.hasTheSameValueAndNotTheSameCoordinates(t2));
+		assertTrue(t1.hasTheSameValueAndNotTheSameCoordinates(t2));
 	}
 
 	public void testhasTheSameValueAndNotTheSameCoordinates4() {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		GameObject t2 = GameObjectImpl.create(1, create(9, 8));
 
-		assertEquals(true, t1.hasTheSameValueAndNotTheSameCoordinates(t2));
+		assertTrue(t1.hasTheSameValueAndNotTheSameCoordinates(t2));
 	}
 
 	public void testhasTheSameValueAndNotTheSameCoordinatesError1() {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		GameObject t2 = GameObjectImpl.create(2, create(9, 9));
 
-		assertEquals(false, t1.hasTheSameValueAndNotTheSameCoordinates(t2));
+		assertFalse(t1.hasTheSameValueAndNotTheSameCoordinates(t2));
 	}
 
 	public void testhasTheSameValueAndNotTheSameCoordinatesError2() {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		GameObject t2 = GameObjectImpl.create(1, create(9, 9));
 
-		assertEquals(false, t1.hasTheSameValueAndNotTheSameCoordinates(t2));
+		assertFalse(t1.hasTheSameValueAndNotTheSameCoordinates(t2));
 	}
 
 	public void testhasTheSameValueAndTheSameCoordinates() {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		GameObject t2 = GameObjectImpl.create(1, create(9, 9));
 
-		assertEquals(true, t1.hasTheSameValueAndTheSameCoordinates(t2));
+		assertTrue(t1.hasTheSameValueAndTheSameCoordinates(t2));
 	}
 
 	public void testhasTheSameValueAndTheSameCoordinatesError() {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		GameObject t2 = GameObjectImpl.create(1, create(8, 9));
 
-		assertEquals(false, t1.hasTheSameValueAndTheSameCoordinates(t2));
+		assertFalse(t1.hasTheSameValueAndTheSameCoordinates(t2));
 	}
 
 	public void testhasTheSameValueAndTheSameCoordinatesError2() {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		GameObject t2 = GameObjectImpl.create(1, create(9, 8));
 
-		assertEquals(false, t1.hasTheSameValueAndTheSameCoordinates(t2));
+		assertFalse(t1.hasTheSameValueAndTheSameCoordinates(t2));
 	}
 
 	public void testhasTheSameValueAndTheSameCoordinatesError3() {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		GameObject t2 = GameObjectImpl.create(2, create(9, 9));
 
-		assertEquals(false, t1.hasTheSameValueAndTheSameCoordinates(t2));
+		assertFalse(t1.hasTheSameValueAndTheSameCoordinates(t2));
 	}
 
 	public void testIsInNormalState() {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		t1.setState(GameObjectState.NORMAL_STATE);
-		assertEquals(true, t1.isInNormalState());
+		assertTrue(t1.isInNormalState());
 	}
 
 	public void testIsInNormalStateError1() {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		t1.setState(GameObjectState.DISABLED_STATE);
-		assertEquals(false, t1.isInNormalState());
+		assertFalse(t1.isInNormalState());
 	}
 
 	public void testIsInNormalStateError2() {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		t1.setState(GameObjectState.PRESSED_STATE);
-		assertEquals(false, t1.isInNormalState());
+		assertFalse(t1.isInNormalState());
 	}
 
 	public void testIsInNormalStateError3() {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		t1.setState(GameObjectState.MATCHED_STATE);
-		assertEquals(false, t1.isInNormalState());
+		assertFalse(t1.isInNormalState());
 	}
 
 	public void testEquals() {
@@ -105,7 +105,7 @@ public class GameObjectTest extends TestCase {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		GameObject t2 = GameObjectImpl.create(1, create(9, 9));
 
-		assertEquals(true, t1.equals(t2));
+		assertTrue(t1.equals(t2));
 	}
 
 	public void testHashCode() {

@@ -18,8 +18,8 @@ public class GameObjectGuiImpl implements GameObjectGui {
     private static final Color BACKGROUND_COLOR = Color.WHITE;
     private static final Color MATCHED_BACKGROUND_COLOR = Color.LIGHT_GRAY;
     private static final Color MOUSEOVER = Color.BLACK;
-	private GameObject gameObject;
-	private GuiHelper guiHelper;
+	private final GameObject gameObject;
+	private final GuiHelper guiHelper;
 	private static final int borderWitdh = 5;
 	private static final int borderWitdhX2 = 10;
 	
@@ -122,16 +122,14 @@ public class GameObjectGuiImpl implements GameObjectGui {
 
 	private int calculateHalfOfTotalValueWidth(){
 		int valueWidth = (calculateValueObjectWidth() * 4); 
-		valueWidth = valueWidth + calculateValueObjectSpace(calculateValueObjectWidth() * 3);		
-		int halfValueWidth = Math.round(valueWidth / 2);
-		return halfValueWidth;
+		valueWidth = valueWidth + calculateValueObjectSpace(calculateValueObjectWidth() * 3);
+		return Math.round(valueWidth / 2);
 	}
 	
 	private int calculateHalfOfTotalValueHeight(){
 		int valueWidth = (calculateValueObjectHeight() * 4); 
-		valueWidth = valueWidth + calculateValueObjectSpace(calculateValueObjectHeight() * 3);		
-		int halfValueWidth = Math.round(valueWidth / 2);
-		return halfValueWidth;
+		valueWidth = valueWidth + calculateValueObjectSpace(calculateValueObjectHeight() * 3);
+		return Math.round(valueWidth / 2);
 	}
 	
 	private int calculateCenterXPos(){

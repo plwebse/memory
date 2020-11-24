@@ -19,9 +19,6 @@ public class ThreadNetworkClient extends AbstractThread implements Runnable {
 
 	private GamePlayerVsNetworkPlayer gamePlayerVsNetworkPlayer;
 	private Socket socket;
-	private InputStreamReader isr;
-	private BufferedReader br;
-	private PrintWriter pw;
 	private long timeStamp;
 	private static Logger logger;
 
@@ -35,7 +32,7 @@ public class ThreadNetworkClient extends AbstractThread implements Runnable {
 
 		if (isFirstTime()) {
 			thread.start();
-			setFirstTime(false);
+			setFirstTime();
 		}
 
 		if (!isRunning()) {
@@ -58,9 +55,9 @@ public class ThreadNetworkClient extends AbstractThread implements Runnable {
 		while (true) {
 			if (isRunning()) {
 				try {
-					isr = new InputStreamReader(socket.getInputStream());
-					br = new BufferedReader(isr);
-					pw = new PrintWriter(socket.getOutputStream());
+					InputStreamReader isr = new InputStreamReader(socket.getInputStream());
+					BufferedReader br = new BufferedReader(isr);
+					PrintWriter pw = new PrintWriter(socket.getOutputStream());
 					Scanner sc = new Scanner(br);
 
 					if (sc.next().equals(ProtocolConstants.SIZE_OF_BOARD)) {
@@ -114,7 +111,7 @@ public class ThreadNetworkClient extends AbstractThread implements Runnable {
 							if (sc.hasNext()) {
 								if (sc.next()
 										.equals(ProtocolConstants.TIME_OUT)) {
-									Long tmpTimeStamp = sc.nextLong();
+									long tmpTimeStamp = sc.nextLong();
 									if (tmpTimeStamp > timeStamp) {
 										timeStamp = tmpTimeStamp;
 									} else {

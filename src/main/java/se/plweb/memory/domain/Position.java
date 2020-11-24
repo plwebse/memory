@@ -73,6 +73,7 @@ public class Position implements Cloneable {
 	}
 
 	public Position clone() {
+		Position position = (Position) super.clone();
 		return new Position(this);
 	}
 

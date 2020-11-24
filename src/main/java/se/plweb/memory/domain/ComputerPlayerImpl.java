@@ -10,10 +10,10 @@ import java.util.Objects;
 
 public class ComputerPlayerImpl implements ComputerPlayer {
 
-    private List<GameObject> visitedGameObjects = new ArrayList<>();
+    private final List<GameObject> visitedGameObjects = new ArrayList<>();
     private int lastX = 0;
     private int lastY = 0;
-    private int numberOfPressedGameObjectsToRemember;
+    private final int numberOfPressedGameObjectsToRemember;
 
     public ComputerPlayerImpl(int numberOfPressedGameObjectsToRemember) {
         this.numberOfPressedGameObjectsToRemember = numberOfPressedGameObjectsToRemember;

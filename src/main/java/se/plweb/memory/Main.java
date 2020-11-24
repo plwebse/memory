@@ -3,7 +3,6 @@ package se.plweb.memory;
 import se.plweb.memory.gui.Gui;
 
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.logging.*;
 
 /**
@@ -11,7 +10,7 @@ import java.util.logging.*;
  */
 
 public class Main {
-    private static Package memoryPackage = Main.class.getPackage();
+    private static final Package memoryPackage = Main.class.getPackage();
     /**
      * @param args
      */

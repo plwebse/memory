@@ -14,11 +14,11 @@ import se.plweb.memory.gui.GameSinglePlayer;
 
 public class ThreadControl {
 
-	private ThreadWaitForNetworkClient threadWaitForNetworkClient = new ThreadWaitForNetworkClient();
-	private ThreadNetworkServer threadNetworkServer = new ThreadNetworkServer();
-	private ThreadNetworkClient threadNetworkClient = new ThreadNetworkClient();
-	private ThreadSinglePlayer threadSinglePlayer = new ThreadSinglePlayer();
-	private ThreadPlayerVsComputerPlayer threadPlayerVsComputerPlayer = new ThreadPlayerVsComputerPlayer();
+	private final ThreadWaitForNetworkClient threadWaitForNetworkClient = new ThreadWaitForNetworkClient();
+	private final ThreadNetworkServer threadNetworkServer = new ThreadNetworkServer();
+	private final ThreadNetworkClient threadNetworkClient = new ThreadNetworkClient();
+	private final ThreadSinglePlayer threadSinglePlayer = new ThreadSinglePlayer();
+	private final ThreadPlayerVsComputerPlayer threadPlayerVsComputerPlayer = new ThreadPlayerVsComputerPlayer();
 
 	private static Logger logger;
 

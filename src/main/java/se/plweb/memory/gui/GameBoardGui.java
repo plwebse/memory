@@ -21,13 +21,12 @@ public class GameBoardGui extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private static Logger logger;
-	protected GameBoard gameBoard;
-	protected Timer st = new Timer(30, this);
+	protected final GameBoard gameBoard;
+	protected final Timer st = new Timer(30, this);
 	private Position hilightObject;
 	protected volatile boolean isPressed = false;
-	private GuiHelper guiHelper;
-	
-	private KeyListener keyListener = new KeyAdapter() {
+
+	private final KeyListener keyListener = new KeyAdapter() {
 		public void keyPressed(KeyEvent e) {
 			logger.fine("keyPressed:" + e.getKeyCode());
 
@@ -52,7 +51,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
 		}
 	};
 
-	private FocusListener focusListener = new FocusAdapter() {
+	private final FocusListener focusListener = new FocusAdapter() {
 		public void focusGained(FocusEvent e) {
 			super.focusGained(e);
 			boolean requestFocusInWindow = GameBoardGui.this
@@ -70,7 +69,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
 		}
 	};
 
-	private MouseInputListener mouseInputListener = new MouseInputAdapter() {
+	private final MouseInputListener mouseInputListener = new MouseInputAdapter() {
 
 		public void mouseMoved(MouseEvent e) {
 			Position mouse = convert(e.getPoint());
@@ -100,13 +99,11 @@ public class GameBoardGui extends JPanel implements ActionListener {
 		setFocusable(true);
 		setEnabled(true);
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				logger.fine("InvokeLater requestFocusInWindow:"
-						+ GameBoardGui.this.requestFocusInWindow());
-				GameBoardGui.this.addMouseListener(mouseInputListener);
-				GameBoardGui.this.addMouseMotionListener(mouseInputListener);
-			}
+		SwingUtilities.invokeLater(() -> {
+			logger.fine("InvokeLater requestFocusInWindow:"
+					+ GameBoardGui.this.requestFocusInWindow());
+			GameBoardGui.this.addMouseListener(mouseInputListener);
+			GameBoardGui.this.addMouseMotionListener(mouseInputListener);
 		});
 
 	}
@@ -245,7 +242,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
 		int i = 1;
 		int valueDirectionCount = 0;
 		gameBoard.newEmptyGameBoard(xSize, ySize);
-		guiHelper = GuiHelper.create(gameBoard.getTotalNumberOfPairs());
+		GuiHelper guiHelper = GuiHelper.create(gameBoard.getTotalNumberOfPairs());
 		// GUI settings
 		this.setLayout(new GridLayout(xSize, ySize));
 

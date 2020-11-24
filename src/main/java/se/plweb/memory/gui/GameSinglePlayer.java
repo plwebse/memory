@@ -13,24 +13,22 @@ public class GameSinglePlayer extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static Logger logger;
-	private GameBoardGui gameBoard = new GameBoardGui();
-	private PlayerStatusPanel statusPanel = new PlayerStatusPanel(
+	private final GameBoardGui gameBoard = new GameBoardGui();
+	private final PlayerStatusPanel statusPanel = new PlayerStatusPanel(
 			"Single player");
-	private JPanel emptyStatusPanel = new JPanel();
 
-	private ThreadControl threadControl = ThreadControl.getInstance();
-	private Gui gui;
+	private final ThreadControl threadControl = ThreadControl.getInstance();
 
 	public GameSinglePlayer(Gui gui, int xSize, int ySize) {
 		logger = Logger.getLogger(this.getClass().getName());		
 		this.gameBoard.makeGameBoard(xSize, ySize);
 		this.gameBoard.startGame();
-		this.gui = gui;
 
+		JPanel emptyStatusPanel = new JPanel();
 		CommonGameFunctions.applyGridBagConstraints(this, gameBoard,
 				statusPanel, emptyStatusPanel);
 
-		this.gui.startSinglePlayer(this);
+		gui.startSinglePlayer(this);
 	}
 
 	public int getMatchedPairs() {

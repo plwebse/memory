@@ -12,9 +12,9 @@ public abstract class AbstractPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	protected static GridBagConstraints fixLayout(int x, int y) {
+	protected static GridBagConstraints fixLayout(int y) {
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = x;
+		gbc.gridx = 0;
 		gbc.gridy = y;
 		gbc.gridheight = 1;
 		gbc.gridwidth = 2;

@@ -7,9 +7,9 @@ import junit.framework.TestCase;
  * 
  */
 public class GameBoardImplTest extends TestCase {
-	GameBoard gameBoard = new GameBoardImpl();
+	final GameBoard gameBoard = new GameBoardImpl();
 
-	protected void setUp() throws Exception {
+	protected void setUp() {
 		gameBoard.makeGameBoard(10, 10);
 	}
 

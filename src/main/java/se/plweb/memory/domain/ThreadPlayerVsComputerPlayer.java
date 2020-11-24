@@ -24,7 +24,7 @@ public class ThreadPlayerVsComputerPlayer extends AbstractThread implements
 
 		if (isFirstTime()) {
 			thread.start();
-			setFirstTime(false);
+			setFirstTime();
 		}
 
 		if (!isRunning()) {

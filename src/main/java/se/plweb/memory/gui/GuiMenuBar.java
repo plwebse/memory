@@ -16,21 +16,21 @@ import javax.swing.JMenuItem;
 public class GuiMenuBar extends JMenuBar implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
-	private JMenu mFile = new JMenu("File");
-	private JMenuItem miExit = new JMenuItem("Exit", KeyEvent.VK_X);
-	private JMenuItem miAbout = new JMenuItem("About", KeyEvent.VK_A);
-	private JMenuItem miNewTwoPlayerVsNetwork = new JMenuItem(
+	private final JMenuItem miExit = new JMenuItem("Exit", KeyEvent.VK_X);
+	private final JMenuItem miAbout = new JMenuItem("About", KeyEvent.VK_A);
+	private final JMenuItem miNewTwoPlayerVsNetwork = new JMenuItem(
 			"Player vs network player", KeyEvent.VK_N);
-	private JMenuItem miNewTwoPlayerVsComputer = new JMenuItem(
+	private final JMenuItem miNewTwoPlayerVsComputer = new JMenuItem(
 			"Player vs computer", KeyEvent.VK_C);
-	private JMenuItem miNewSinglePlayer = new JMenuItem("Single player",
+	private final JMenuItem miNewSinglePlayer = new JMenuItem("Single player",
 			KeyEvent.VK_S);
-	private Gui gui;
+	private final Gui gui;
 	
 	public GuiMenuBar(Gui gui) {
 		super();		
 		this.gui = gui;
-		
+
+		JMenu mFile = new JMenu("File");
 		mFile.setMnemonic(KeyEvent.VK_F); // show the menu
 
 		miNewSinglePlayer.addActionListener(this);

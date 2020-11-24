@@ -12,8 +12,8 @@ public class GameBoardGuiPlayerVsComputerPlayer extends GameBoardGui {
 
 	private static final long serialVersionUID = 1L;
 	private static Logger logger;
-	private ComputerPlayer computerPlayer;
-	private GameBoard computerPlayersGameBoard;
+	private final ComputerPlayer computerPlayer;
+	private final GameBoard computerPlayersGameBoard;
 
 	public GameBoardGuiPlayerVsComputerPlayer(ComputerPlayer computerPlayer,
 			GameBoard computerPlayersGameBoard) {

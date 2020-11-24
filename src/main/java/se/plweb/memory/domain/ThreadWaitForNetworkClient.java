@@ -35,7 +35,7 @@ public class ThreadWaitForNetworkClient extends AbstractThread implements
 		if (isFirstTime()) {
 			this.thread.start();
 			logger.log(Level.FINE, "start firstTime=true");
-			setFirstTime(false);
+			setFirstTime();
 		}
 
 		if (!isRunning()) {

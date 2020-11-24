@@ -13,19 +13,13 @@ public class GamePlayerVsNetworkPlayer extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger;
 
-	private GameBoardGui gameBoard = new GameBoardGui();
-	private PlayerStatusPanel playerStatusPanelServer = new PlayerStatusPanel(
+	private final GameBoardGui gameBoard = new GameBoardGui();
+	private final PlayerStatusPanel playerStatusPanelServer = new PlayerStatusPanel(
 			"Server");
-	private PlayerStatusPanel playerStatusPanelClient = new PlayerStatusPanel(
+	private final PlayerStatusPanel playerStatusPanelClient = new PlayerStatusPanel(
 			"Client");
-	private Gui gui;
-	private ThreadControl threadControl = ThreadControl.getInstance();
-
-	private String messageDisconnected = "Disconnected";
-	private String messageWaitingForClient = "wating for client...";
-	private String messageServerWon = "Client won";
-	private String messageClientWon = "Server won";
-	private String messageNotConnected = "Not connected...";
+	private final Gui gui;
+	private final ThreadControl threadControl = ThreadControl.getInstance();
 
 	public GamePlayerVsNetworkPlayer(int xSize, int ySize, Gui gui, int port) {
 		logger = Logger.getLogger(this.getClass().getName());
@@ -57,11 +51,13 @@ public class GamePlayerVsNetworkPlayer extends JPanel {
 	}
 
 	public void waitingForClient() {
+		String messageWaitingForClient = "wating for client...";
 		playerStatusPanelClient.updateStatus(messageWaitingForClient);
 		playerStatusPanelServer.updateStatus(messageWaitingForClient);
 	}
 
 	public void notConnected() {
+		String messageNotConnected = "Not connected...";
 		playerStatusPanelClient.updateStatus(messageNotConnected);
 		playerStatusPanelServer.updateStatus(messageNotConnected);
 	}
@@ -103,6 +99,7 @@ public class GamePlayerVsNetworkPlayer extends JPanel {
 	}
 
 	public void clientWon() {
+		String messageClientWon = "Server won";
 		playerStatusPanelClient.updateStatus(messageClientWon);
 		playerStatusPanelServer.updateStatus(messageClientWon);
 		playerStatusPanelClient.updatePairStatus(0, 0);
@@ -112,6 +109,7 @@ public class GamePlayerVsNetworkPlayer extends JPanel {
 	}
 
 	public void serverWon() {
+		String messageServerWon = "Client won";
 		playerStatusPanelClient.updateStatus(messageServerWon);
 		playerStatusPanelServer.updateStatus(messageServerWon);
 		playerStatusPanelClient.updatePairStatus(0, 0);
@@ -121,6 +119,7 @@ public class GamePlayerVsNetworkPlayer extends JPanel {
 	}
 
 	public void disConnected() {
+		String messageDisconnected = "Disconnected";
 		playerStatusPanelClient.updateStatus(messageDisconnected);
 		playerStatusPanelServer.updateStatus(messageDisconnected);
 		gameBoard.stopGame();

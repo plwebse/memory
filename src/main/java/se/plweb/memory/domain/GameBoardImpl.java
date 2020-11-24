@@ -21,8 +21,8 @@ public class GameBoardImpl implements GameBoard {
     private int totalNumberOfPairs;
     private int matchedPairs;
     private int totalNumberOfAttempts = 0;
-    private List<GameObject> pressedObjects = Collections.synchronizedList(new ArrayList<>(pressedObjectsLength));
-    private List<GameObject> gameBoard = Collections.synchronizedList(new ArrayList<>());
+    private final List<GameObject> pressedObjects = Collections.synchronizedList(new ArrayList<>(pressedObjectsLength));
+    private final List<GameObject> gameBoard = Collections.synchronizedList(new ArrayList<>());
 
     public GameBoardImpl() {
         logger = Logger.getLogger(this.getClass().getName());
@@ -47,7 +47,7 @@ public class GameBoardImpl implements GameBoard {
     private void randomizeGameObjectsValues() {
         List<Integer> values = Collections.synchronizedList(new ArrayList<Integer>());
 
-        values = addValuePairToList(1, getTotalNumberOfPairs());
+        values = addValuePairToList(getTotalNumberOfPairs());
 
         for (int x = 0; x < getXSize(); x++) {
             for (int y = 0; y < getYSize(); y++) {
@@ -60,10 +60,10 @@ public class GameBoardImpl implements GameBoard {
         }
     }
 
-    private List<Integer> addValuePairToList(Integer minValue, Integer maxValue) {
+    private List<Integer> addValuePairToList(Integer maxValue) {
         List<Integer> values = Collections.synchronizedList(new ArrayList<Integer>());
 
-        for (int currentValue = minValue; currentValue <= maxValue; currentValue++) {
+        for (int currentValue = 1; currentValue <= maxValue; currentValue++) {
             values.add(currentValue);
             values.add(currentValue);
         }
@@ -181,27 +181,10 @@ public class GameBoardImpl implements GameBoard {
 
     public void makeGameBoard(int xSize, int ySize) {
 
-        int value = 1;
-        int i = 1;
-
         newEmptyGameBoard(xSize, ySize);
 
         createGameObjects(xSize, ySize)
 				.forEach(this::setGameObject);
-        /*
-        for (int x = 0; x < xSize; x++) {
-            for (int y = 0; y < ySize; y++) {
-
-                GameObject gameObject = new GameObjectImpl(value, Position.create(x, y));
-                gameObject.setState(GameObjectState.PRESSED_STATE);
-
-                this.setGameObject(gameObject);
-                if (i % 2 == 0) {
-                    value++;
-                }
-                i++;
-            }
-        }*/
     }
 
     public synchronized GameObject getGameObject(Position position) {

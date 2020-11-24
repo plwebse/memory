@@ -17,38 +17,38 @@ public class PlayerVsCumputerPlayerPanel extends AbstractPanel implements
 		ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private GridBagLayout gblMulti = new GridBagLayout();
-	private JLabel lHeading = new JLabel("New player vs computer player game",
-			JLabel.CENTER);
-	private JLabel lSelectSize = new JLabel("select size", JLabel.CENTER);
-	private JComboBox cSelectSize = new JComboBox(GameBoardDimension.values());
-	private JLabel lDifficulty = new JLabel("select difficulty", JLabel.CENTER);
-	private String[] sDifficulties = getComputerPlayersDifficulties();
-	private ComputerPlayers[] difficulties = ComputerPlayers.values();
-	private JComboBox cSelectDifficulty = new JComboBox(sDifficulties);
-	private JButton bOk = new JButton("OK");
+	private final JComboBox<GameBoardDimension> cSelectSize = new JComboBox<>(GameBoardDimension.values());
+	private final String[] sDifficulties = getComputerPlayersDifficulties();
+	private final ComputerPlayers[] difficulties = ComputerPlayers.values();
+	private final JComboBox<String> cSelectDifficulty = new JComboBox<>(sDifficulties);
+	private final JButton bOk = new JButton("OK");
 	private Gui gui = null;
 
 	public PlayerVsCumputerPlayerPanel(Gui gui) {
 
 		this.gui = gui;
 
-		gblMulti.setConstraints(lHeading, fixLayout(0, 0));
+		JLabel lHeading = new JLabel("New player vs computer player game",
+				JLabel.CENTER);
+		GridBagLayout gblMulti = new GridBagLayout();
+		gblMulti.setConstraints(lHeading, fixLayout(0));
 		this.add(lHeading);
 
-		gblMulti.setConstraints(lSelectSize, fixLayout(0, 1));
+		JLabel lSelectSize = new JLabel("select size", JLabel.CENTER);
+		gblMulti.setConstraints(lSelectSize, fixLayout(1));
 		this.add(lSelectSize);
 
-		gblMulti.setConstraints(cSelectSize, fixLayout(0, 2));
+		gblMulti.setConstraints(cSelectSize, fixLayout(2));
 		this.add(cSelectSize);
 
-		gblMulti.setConstraints(lDifficulty, fixLayout(0, 3));
+		JLabel lDifficulty = new JLabel("select difficulty", JLabel.CENTER);
+		gblMulti.setConstraints(lDifficulty, fixLayout(3));
 		this.add(lDifficulty);
 
-		gblMulti.setConstraints(cSelectDifficulty, fixLayout(0, 4));
+		gblMulti.setConstraints(cSelectDifficulty, fixLayout(4));
 		this.add(cSelectDifficulty);
 
-		gblMulti.setConstraints(bOk, fixLayout(0, 5));
+		gblMulti.setConstraints(bOk, fixLayout(5));
 		this.add(bOk);
 
 		bOk.addActionListener(this);

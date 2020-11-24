@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public class GuiHelper {
 
-    private ColorValue[] colorValues;
-    private int[] displayValues = new int[ValueColor.values().length];
+    private final ColorValue[] colorValues;
+    private final int[] displayValues = new int[ValueColor.values().length];
 
     private GuiHelper(int totalNumberOfPairs) {
         colorValues = new ColorValue[totalNumberOfPairs];
@@ -71,7 +71,7 @@ public class GuiHelper {
         GREEN(Color.GREEN),
         BLUE(Color.BLUE);
 
-        private Color color;
+        private final Color color;
 
         ValueColor(Color color) {
             this.color = color;
@@ -82,7 +82,7 @@ public class GuiHelper {
         }
     }
 
-    class ColorValue {
+    static class ColorValue {
 
         private final int color;
         private final int displayValue;
