@@ -2,6 +2,7 @@ package se.plweb.memory.gui;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class GuiHelper {
 
@@ -54,11 +55,8 @@ public class GuiHelper {
 
     public int getDisplayValue(int value) {
         ColorValue colorValue = getColorValueFor(value);
-        if (colorValue != null) {
-            return colorValue.getDisplayValue();
-        }
-
-        return -1;
+        return Optional.ofNullable(colorValue)
+                .map(ColorValue::getDisplayValue).orElse(-1);
     }
 
     @Override
@@ -86,12 +84,11 @@ public class GuiHelper {
 
     class ColorValue {
 
-        private int color;
-        private int displayValue;
+        private final int color;
+        private final int displayValue;
 
         public ColorValue(int color, int displayValue) {
             this.color = color;
-
             this.displayValue = displayValue;
         }
 
