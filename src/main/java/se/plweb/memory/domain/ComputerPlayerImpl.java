@@ -107,12 +107,10 @@ public class ComputerPlayerImpl implements ComputerPlayer {
         if (gameBoard.isFull()) {
             if (gameBoard.isAMatch()) {
 
-                if (visitedGameObjects.size() > 0
-                        && visitedGameObjects.contains(firstObjectToPress)) {
+                if (visitedGameObjects.size() > 0) {
                     visitedGameObjects.remove(firstObjectToPress);
                 }
-                if (visitedGameObjects.size() > 0
-                        && visitedGameObjects.contains(secondObjectToPress)) {
+                if (visitedGameObjects.size() > 0) {
                     visitedGameObjects.remove(secondObjectToPress);
                 }
             }

@@ -6,22 +6,22 @@ package se.plweb.memory.domain;
 
 public interface GameObject {
 
-    public GameObjectState getState();
+    GameObjectState getState();
 
-    public void setState(GameObjectState state);
+    void setState(GameObjectState state);
 
-    public int getValue();
+    int getValue();
 
-    public void setValue(int value);
+    void setValue(int value);
 
-    public Position getPosition();
+    Position getPosition();
 
-    public void setPosition(Position position);
+    void setPosition(Position position);
 
-    public boolean isInNormalState();
+    boolean isInNormalState();
 
-    public boolean hasTheSameValueAndTheSameCoordinates(GameObject gameObject);
+    boolean hasTheSameValueAndTheSameCoordinates(GameObject gameObject);
 
-    public boolean hasTheSameValueAndNotTheSameCoordinates(GameObject gameObject);
+    boolean hasTheSameValueAndNotTheSameCoordinates(GameObject gameObject);
 
 }
