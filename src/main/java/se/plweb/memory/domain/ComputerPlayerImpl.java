@@ -88,15 +88,15 @@ public class ComputerPlayerImpl implements ComputerPlayer {
     }
 
     private void addGameObjectToVisitedGameObjectsIfNotAlreadyThere(
-            GameObject gameObject, int numberOfpressGameObjectsToRemember) {
+            GameObject gameObject, int numberOfPressedGameObjectsToRemember) {
 
         if (visitedGameObjects.size() > 0) {
             if (!visitedGameObjects.contains(gameObject)
-                    && numberOfpressGameObjectsToRemember >= visitedGameObjects
+                    && numberOfPressedGameObjectsToRemember >= visitedGameObjects
                     .size()) {
                 visitedGameObjects.add(gameObject);
             }
-        } else if (visitedGameObjects.size() == 0) {
+        } else {
             visitedGameObjects.add(gameObject);
         }
     }
@@ -106,15 +106,8 @@ public class ComputerPlayerImpl implements ComputerPlayer {
             GameObject secondObjectToPress) {
         if (gameBoard.isFull()) {
             if (gameBoard.isAMatch()) {
-
-                if (visitedGameObjects.size() > 0
-                        && visitedGameObjects.contains(firstObjectToPress)) {
-                    visitedGameObjects.remove(firstObjectToPress);
-                }
-                if (visitedGameObjects.size() > 0
-                        && visitedGameObjects.contains(secondObjectToPress)) {
-                    visitedGameObjects.remove(secondObjectToPress);
-                }
+                visitedGameObjects.remove(firstObjectToPress);
+                visitedGameObjects.remove(secondObjectToPress);
             }
             gameBoard.clearPressedObjects();
         }

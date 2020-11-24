@@ -137,10 +137,10 @@ public class GameBoardGui extends JPanel implements ActionListener {
 	protected Size calculateGameObjectSize(Size gameBoardGuiSize, int xSize,
 			int ySize) {
 		try {
-			return new Size((gameBoardGuiSize.getWidth() / xSize),
+			return Size.create((gameBoardGuiSize.getWidth() / xSize),
 					(gameBoardGuiSize.getHeight() / ySize));
 		} catch (ArithmeticException e) {
-			return new Size(0, 0);
+			return Size.create(0, 0);
 		}
 	}
 
@@ -245,7 +245,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
 		int i = 1;
 		int valueDirectionCount = 0;
 		gameBoard.newEmptyGameBoard(xSize, ySize);
-		guiHelper = new GuiHelper(gameBoard.getTotalNumberOfPairs());
+		guiHelper = GuiHelper.create(gameBoard.getTotalNumberOfPairs());
 		// GUI settings
 		this.setLayout(new GridLayout(xSize, ySize));
 

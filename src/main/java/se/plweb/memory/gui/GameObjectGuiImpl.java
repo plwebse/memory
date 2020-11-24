@@ -24,9 +24,9 @@ public class GameObjectGuiImpl implements GameObjectGui {
 	private static final int borderWitdhX2 = 10;
 	
 	private int width, height, xTopLeft, yTopLeft;
-	public enum GUIState {NORMAL, MOUSE_OVER};
-	
-	public GameObjectGuiImpl(int value, Position position, GuiHelper guiHelper) {
+	public enum GUIState {NORMAL, MOUSE_OVER}
+
+    public GameObjectGuiImpl(int value, Position position, GuiHelper guiHelper) {
 		gameObject = GameObjectImpl.create(value, position);
 		this.guiHelper = guiHelper;
 	}
@@ -207,16 +207,11 @@ public class GameObjectGuiImpl implements GameObjectGui {
 	}
 
 	public boolean isPositionInsideOfGameObject(Position position) {
-		
-		if(position != null 
-			&& position.getXPos() >= xTopLeft 
-			&& position.getXPos() < (xTopLeft+width)
-			&& position.getYPos() >= yTopLeft
-			&& position.getYPos() < (yTopLeft+height)
-		){
-			return true;
-		}
-		
-		return false;
-	}
+
+        return position != null
+                && position.getXPos() >= xTopLeft
+                && position.getXPos() < (xTopLeft + width)
+                && position.getYPos() >= yTopLeft
+                && position.getYPos() < (yTopLeft + height);
+    }
 }

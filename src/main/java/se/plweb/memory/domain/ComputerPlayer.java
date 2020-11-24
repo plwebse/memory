@@ -7,6 +7,6 @@ package se.plweb.memory.domain;
 
 public interface ComputerPlayer {
 
-	public void makeAComputerMove(GameBoard gameBoard);
+	void makeAComputerMove(GameBoard gameBoard);
 
 }

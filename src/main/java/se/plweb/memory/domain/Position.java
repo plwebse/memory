@@ -87,13 +87,10 @@ public class Position implements Cloneable {
 
 	@Override
 	public synchronized boolean equals(Object obj) {
-		if (obj instanceof Position
-				&& this.getXPos() == ((Position) obj).getXPos()
-				&& this.getYPos() == ((Position) obj).getYPos()) {
-			return true;
-		}
-		return false;
-	}
+        return obj instanceof Position
+                && this.getXPos() == ((Position) obj).getXPos()
+                && this.getYPos() == ((Position) obj).getYPos();
+    }
 
 	public static Position create(int xPos, int yPos) {
 		return new Position(xPos, yPos);

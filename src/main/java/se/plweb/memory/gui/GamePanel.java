@@ -14,7 +14,7 @@ public enum GamePanel {
 	
 	private String toString;
 	
-	private GamePanel(String toString) {
+	GamePanel(String toString) {
 		this.toString = toString;		
 	}
 	

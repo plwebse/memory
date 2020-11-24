@@ -8,7 +8,7 @@ public class GuiHelper {
     private ColorValue[] colorValues;
     private int[] displayValues = new int[ValueColor.values().length];
 
-    public GuiHelper(int totalNumberOfPairs) {
+    private GuiHelper(int totalNumberOfPairs) {
         colorValues = new ColorValue[totalNumberOfPairs];
 
         for (int value = 1; value <= totalNumberOfPairs; value++) {
@@ -17,6 +17,10 @@ public class GuiHelper {
             colorValues[getArrayIndex(value)] = new ColorValue(color,
                     displayValues[color]);
         }
+    }
+
+    public static GuiHelper create(int totalNumberOfPairs){
+        return new GuiHelper(totalNumberOfPairs);
     }
 
     private ColorValue getColorValueFor(int value) {

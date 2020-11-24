@@ -7,8 +7,8 @@ public class DimensionToSizeConverter {
 
     public static Size convert(Dimension dimension) {
         if (dimension != null) {
-            return new Size(dimension.width, dimension.height);
+            return Size.create(dimension.width, dimension.height);
         }
-        return new Size(0, 0);
+        return Size.create(0, 0);
     }
 }

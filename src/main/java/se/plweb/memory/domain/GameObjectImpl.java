@@ -47,21 +47,13 @@ public class GameObjectImpl implements GameObject {
     }
 
     public synchronized boolean hasTheSameValueAndNotTheSameCoordinates(GameObject gameObject) {
-        if (gameObject.getValue() == this.getValue()
-                && !this.position.equals(gameObject.getPosition())) {
-            return true;
-        } else {
-            return false;
-        }
+        return gameObject.getValue() == this.getValue()
+                && !this.position.equals(gameObject.getPosition());
     }
 
     public synchronized boolean hasTheSameValueAndTheSameCoordinates(GameObject gameObject) {
-        if (gameObject.getValue() == this.getValue()
-                && gameObject.getPosition().equals(this.position)) {
-            return true;
-        } else {
-            return false;
-        }
+        return gameObject.getValue() == this.getValue()
+                && gameObject.getPosition().equals(this.position);
     }
 
     @Override
