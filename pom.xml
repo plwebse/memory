@@ -1,0 +1,106 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>plweb.se</groupId>
+	<artifactId>memory</artifactId>
+	<version>5.1.1</version>
+	<packaging>jar</packaging>
+
+	<name>Memory</name>
+	<description>A simple Memory game done by me  Peter Lindblom. First version was made in 2008.</description>
+	<url>http://www.plweb.se</url>
+	<organization>
+		<name>Peter Lindblom</name>
+		<url>http://www.plweb.se</url>
+	</organization>
+	<developers>
+		<developer>
+			<name>Peter Lindblom</name>
+			<email>Peter.Lindblom@plweb.se</email>
+			<url>http://www.plweb.se</url>
+		</developer>
+	</developers>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<archive>
+						
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<mainClass>se.plweb.memory.Main</mainClass>
+							<packageName>se.plweb.memory</packageName>
+						</manifest>
+						<manifestEntries>
+			            	<Implementation-Build>${project.version}</Implementation-Build>
+          				</manifestEntries>
+						<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+						
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2-beta-5</version>
+
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>src</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- append to the packaging phase. -->
+						<goals>
+							<goal>single</goal> <!-- goals == mojos -->
+						</goals>
+					</execution>
+				</executions>
+
+
+			</plugin>
+		</plugins>
+	</build>
+
+	<properties>
+
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.13</version>
+				<configuration>
+					<targetJdk>1.8</targetJdk>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+
+</project>
