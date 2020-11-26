@@ -12,6 +12,7 @@ public class AboutTheGamePanel extends AbstractPanel {
 
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("SpellCheckingInspection")
 	public AboutTheGamePanel() {
 
 		JLabel lAbout = new JLabel("Made by Peter Lindblom 2010");

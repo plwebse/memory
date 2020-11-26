@@ -91,7 +91,7 @@ public class ThreadNetworkServer extends AbstractThread implements Runnable {
 											gamePlayerVsNetworkPlayer
 													.getTotalNumberOfAttempts());
 							pw
-									.println(ProtocolConstants.MATCHEDPAIRS_AND_ATTEMPTS
+									.println(ProtocolConstants.MATCHED_PAIRS_AND_ATTEMPTS
 											+ ProtocolConstants.SPACE
 											+ gamePlayerVsNetworkPlayer
 													.getMatchedPairs()
@@ -103,14 +103,13 @@ public class ThreadNetworkServer extends AbstractThread implements Runnable {
 							if (sc.hasNext()) {
 								String tmp = sc.next();
 								if (tmp
-										.equals(ProtocolConstants.MATCHEDPAIRS_AND_ATTEMPTS)) {
+										.equals(ProtocolConstants.MATCHED_PAIRS_AND_ATTEMPTS)) {
 									gamePlayerVsNetworkPlayer
 											.updateStatusClient(sc.nextInt(),
 													sc.nextInt());
 								} else if (tmp.equals(ProtocolConstants.WON)) {
 									gamePlayerVsNetworkPlayer.clientWon();
-									logger
-											.log(Level.FINE,
+									logger.log(Level.FINE,
 													"gamePlayerVsNetworkPlayer.clientWon();");
 									break;
 								}
@@ -122,8 +121,7 @@ public class ThreadNetworkServer extends AbstractThread implements Runnable {
 							pw.flush();
 
 							if (sc.hasNext()) {
-								if (sc.next()
-										.equals(ProtocolConstants.TIME_OUT)) {
+								if (sc.next().equals(ProtocolConstants.TIME_OUT)) {
 									long tmpTimeStamp = sc.nextLong();
 									if (tmpTimeStamp > timeStamp) {
 										timeStamp = tmpTimeStamp;

@@ -17,7 +17,7 @@ public class SinglePlayerPanel extends AbstractPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private final JComboBox<GameBoardDimension> cSingleSize = new JComboBox<>(GameBoardDimension.values());
 	private final JButton bSingleOk = new JButton("OK");
-	private Gui gui;
+	private final Gui gui;
 
 	public SinglePlayerPanel(Gui gui) {
 

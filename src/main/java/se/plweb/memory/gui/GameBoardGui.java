@@ -41,7 +41,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
         }
     };
     protected volatile boolean isPressed = false;
-    private Position hilightObject;
+    private Position highlightedObject;
     private final KeyListener keyListener = new KeyAdapter() {
         public void keyPressed(KeyEvent e) {
             logger.fine("keyPressed:" + e.getKeyCode());
@@ -60,7 +60,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
                     moveDownIfPossible();
                     break;
                 case KeyEvent.VK_SPACE:
-                    pressIfPossible(hilightObject);
+                    pressIfPossible(highlightedObject);
                     break;
             }
             repaint();
@@ -70,7 +70,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
 
         public void mouseMoved(MouseEvent e) {
             Position mouse = convert(e.getPoint());
-			GameBoardGui.this.hilightObject = getGameObjectGuiPositionAtPosition(mouse);
+			GameBoardGui.this.highlightedObject = getGameObjectGuiPositionAtPosition(mouse);
             repaint();
         }
 
@@ -90,7 +90,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
         logger = Logger.getLogger(this.getClass().getName());
         gameBoard = new GameBoardImpl();
 
-        hilightObject = Position.create(0, 0);
+        highlightedObject = Position.create(0, 0);
         setPreferredSize(new Dimension(600, 400));
         setFocusable(true);
         setEnabled(true);
@@ -109,7 +109,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
         for (int y = 0; y < gameBoard.getXSize(); y++) {
             for (int x = 0; x < gameBoard.getXSize(); x++) {
                 GUIState state;
-                if (hilightObject.equals(Position.create(x, y))) {
+                if (highlightedObject.equals(Position.create(x, y))) {
                     state = GUIState.MOUSE_OVER;
                 } else {
                     state = GUIState.NORMAL;
@@ -145,26 +145,26 @@ public class GameBoardGui extends JPanel implements ActionListener {
     }
 
     private void moveRightIfPossible() {
-        if (hilightObject.getXPos() < (gameBoard.getXSize() - 1)) {
-            hilightObject.moveRight();
+        if (highlightedObject.getXPos() < (gameBoard.getXSize() - 1)) {
+            highlightedObject.moveRight();
         }
     }
 
     private void moveLeftIfPossible() {
-        if (hilightObject.getXPos() > 0) {
-            hilightObject.moveLeft();
+        if (highlightedObject.getXPos() > 0) {
+            highlightedObject.moveLeft();
         }
     }
 
     private void moveUpIfPossible() {
-        if (hilightObject.getYPos() > 0) {
-            hilightObject.moveUp();
+        if (highlightedObject.getYPos() > 0) {
+            highlightedObject.moveUp();
         }
     }
 
     private void moveDownIfPossible() {
-        if (hilightObject.getYPos() < (gameBoard.getYSize() - 1)) {
-            hilightObject.moveDown();
+        if (highlightedObject.getYPos() < (gameBoard.getYSize() - 1)) {
+            highlightedObject.moveDown();
         }
     }
 

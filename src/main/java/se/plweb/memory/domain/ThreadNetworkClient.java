@@ -88,7 +88,7 @@ public class ThreadNetworkClient extends AbstractThread implements Runnable {
 							if (sc.hasNext()) {
 								String tmp = sc.next();
 								if (tmp
-										.equals(ProtocolConstants.MATCHEDPAIRS_AND_ATTEMPTS)) {
+										.equals(ProtocolConstants.MATCHED_PAIRS_AND_ATTEMPTS)) {
 									gamePlayerVsNetworkPlayer
 											.updateStatusServer(sc.nextInt(),
 													sc.nextInt());
@@ -99,7 +99,7 @@ public class ThreadNetworkClient extends AbstractThread implements Runnable {
 							}
 
 							pw
-									.println(ProtocolConstants.MATCHEDPAIRS_AND_ATTEMPTS
+									.println(ProtocolConstants.MATCHED_PAIRS_AND_ATTEMPTS
 											+ ProtocolConstants.SPACE
 											+ gamePlayerVsNetworkPlayer
 													.getMatchedPairs()

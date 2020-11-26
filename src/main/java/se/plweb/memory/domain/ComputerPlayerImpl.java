@@ -33,18 +33,6 @@ public class ComputerPlayerImpl implements ComputerPlayer {
         gameBoard.pressObject(firstObjectToPress);
         gameBoard.pressObject(secondObjectToPress);
 
-        /*
-        secondObjectToPress = getAVisitedGameObjectWithTheSameValue(firstObjectToPress);
-
-        if (Objects.nonNull(secondObjectToPress)) {
-            gameBoard.pressObject(secondObjectToPress);
-        } else {
-            secondObjectToPress = findAObjectToPress(gameBoard);
-            addGameObjectToVisitedGameObjectsIfNotAlreadyThere(
-                    secondObjectToPress, numberOfPressedGameObjectsToRemember);
-            gameBoard.pressObject(secondObjectToPress);
-        }
-        */
         checkIfThePressObjectsIsAMatchOrNotAndClearsThePressedObjects(
                 gameBoard, firstObjectToPress, secondObjectToPress);
     }

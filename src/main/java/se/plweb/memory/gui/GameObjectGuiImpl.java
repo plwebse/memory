@@ -16,8 +16,8 @@ public class GameObjectGuiImpl implements GameObjectGui {
     private static final Color BACKGROUND_COLOR = Color.WHITE;
     private static final Color MATCHED_BACKGROUND_COLOR = Color.LIGHT_GRAY;
     private static final Color MOUSEOVER = Color.BLACK;
-    private static final int borderWitdh = 5;
-    private static final int borderWitdhX2 = 10;
+    private static final int borderWidth = 5;
+    private static final int borderWidthX2 = 10;
     private final GameObject gameObject;
     private final GuiHelper guiHelper;
     private int width, height, xTopLeft, yTopLeft;
@@ -77,7 +77,7 @@ public class GameObjectGuiImpl implements GameObjectGui {
         int xOffset = startX;
         int yOffset = startY;
 
-        for (int i = 0, row = 0; i < tmpValue; i++) {
+        for (int i = 0; i < tmpValue; i++) {
             graphics.fillRect(xOffset, yOffset, valueObjectWidth, valueObjectHeight);
             if ((i + 1) % 4 != 0) {
                 xOffset = xOffset + (valueObjectWidth + calculateValueObjectSpace(valueObjectWidth));
@@ -89,14 +89,14 @@ public class GameObjectGuiImpl implements GameObjectGui {
     }
 
     private int calculateTopX() {
-        int topLeftX = xTopLeft + borderWitdh;
+        int topLeftX = xTopLeft + borderWidth;
         topLeftX += calculateCenterXPos();
         topLeftX = topLeftX - calculateHalfOfTotalValueWidth();
         return topLeftX;
     }
 
     private int calculateTopY() {
-        int topLeftY = yTopLeft + borderWitdh;
+        int topLeftY = yTopLeft + borderWidth;
         topLeftY += calculateCenterYPos();
         topLeftY = topLeftY - calculateHalfOfTotalValueHeight();
         return topLeftY;
@@ -115,19 +115,19 @@ public class GameObjectGuiImpl implements GameObjectGui {
     }
 
     private int calculateCenterXPos() {
-        return divideBy2(width - borderWitdhX2);
+        return divideBy2(width - borderWidthX2);
     }
 
     private int calculateCenterYPos() {
-        return divideBy2(height - borderWitdhX2);
+        return divideBy2(height - borderWidthX2);
     }
 
     private int calculateValueObjectWidth() {
-        return divideBy6(width - borderWitdhX2);
+        return divideBy6(width - borderWidthX2);
     }
 
     private int calculateValueObjectHeight() {
-        return divideBy6(height - borderWitdhX2);
+        return divideBy6(height - borderWidthX2);
     }
 
     private int calculateValueObjectSpace(int valueObjectWidthOrHeight) {

@@ -3,14 +3,17 @@ package se.plweb.memory;
 import se.plweb.memory.gui.Gui;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.logging.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Peter Lindblom
  */
 
 public class Main {
-    private static final Package memoryPackage = Main.class.getPackage();
+    private static final Package MEMORY_PACKAGE = Main.class.getPackage();
 
     public static void main(String[] args) {
         new Gui(getVersionInfo());
@@ -19,24 +22,17 @@ public class Main {
     }
 
     private static String getVersionInfo() {
-        if (memoryPackage.getImplementationTitle() != null) {
-            return "plweb.se / "
-                    + memoryPackage.getImplementationTitle()
-                    + " "
-                    + memoryPackage.getImplementationVersion();
-        }
-        return "plweb.se";
+        return Stream.of(MEMORY_PACKAGE.getImplementationTitle(),
+                MEMORY_PACKAGE.getImplementationVersion(),  "plweb.se")
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining(" / "));
     }
 
     private static void debugLogging(String[] args) {
         if (Arrays.stream(args).anyMatch("debug"::equalsIgnoreCase)) {
             try {
-                Handler handler;
-                Formatter formatter = new SimpleFormatter();
-
-                handler = new ConsoleHandler();
-                handler.setFormatter(formatter);
-                Logger.getLogger("").addHandler(handler);
+                Handler handler = new ConsoleHandler();
+                Logger.getLogger("se.plweb").addHandler(handler);
                 Logger.getLogger("se.plweb").setLevel(Level.ALL);
 
             } catch (Exception e) {

@@ -62,12 +62,12 @@ public class ThreadWaitForNetworkClient extends AbstractThread implements
                 try {
                     serverSocket = new ServerSocket(port);
                     gameMultiPlayer.waitingForClient();
-                    logger.log(Level.FINE, "run väntar på klient");
+                    logger.log(Level.FINE, "run waiting for client");
                     threadControl.startServer(serverSocket.accept(),
                             gameMultiPlayer, xSize, ySize);
                     closeServerSocket(serverSocket);
                     threadControl.stopWaitForClient();
-                    logger.log(Level.FINE, "run färdig");
+                    logger.log(Level.FINE, "run complete");
                 } catch (Exception e) {
                     logger.log(Level.WARNING, e.getMessage());
                 } finally {

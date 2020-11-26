@@ -23,7 +23,7 @@ public class PlayerVsNetworkPlayerPanel extends AbstractPanel implements
 	private final JComboBox<String> cMultiClientOrServer = new JComboBox<>(sMultiClientOrServer);
 	private final JTextField tMultiIPNumber = new JTextField("localhost");
 	private final JTextField tMultiPortNumber = new JTextField("6777");
-	private Gui gui;
+	private final Gui gui;
 
 	public PlayerVsNetworkPlayerPanel(Gui gui) {
 
