@@ -4,119 +4,106 @@ import junit.framework.TestCase;
 
 /**
  * @author Peter Lindblom
- * 
  */
 public class ComputerPlayersTest extends TestCase {
 
-	GameBoard gameBoard = new GameBoardImpl();
+    GameBoard gameBoard = new GameBoardImpl();
 
-	@Override
-	protected void setUp() {
-		gameBoard = new GameBoardImpl();
-		gameBoard.makeGameBoard(10, 10);
-		gameBoard.startGame();
-	}
+    @Override
+    protected void setUp() {
+        gameBoard = new GameBoardImpl();
+        gameBoard.makeGameBoard(10, 10);
+        gameBoard.startGame();
+    }
 
-	@Override
-	protected void tearDown() {
-		gameBoard.stopGame();
-		gameBoard = null;
-	}
+    @Override
+    protected void tearDown() {
+        gameBoard.stopGame();
+        gameBoard = null;
+    }
 
-	public void testThisSetUp() {
-		boolean expected = true;
-		boolean actual = false;
+    public void testThisSetUp() {
 
-		if (gameBoard.getTotalNumberOfPairs() > 0) {
-			actual = true;
-		}
+        boolean actual = false;
 
-		assertEquals(expected, actual);
-	}
+        if (gameBoard.getTotalNumberOfPairs() > 0) {
+            actual = true;
+        }
 
-	public void testThisSetUp2() {
-		boolean expected = true;
-		boolean actual = false;
+        assertTrue(actual);
+    }
 
-		if (gameBoard.getNumberOfMatchedPairs() == 0) {
-			actual = true;
-		}
+    public void testThisSetUp2() {
 
-		assertEquals(expected, actual);
-	}
+        boolean actual = false;
 
-	public void testEnumFactory() {
-		boolean expected = true;
-		boolean actual = false;
-		if (ComputerPlayers.EASY.equals(ComputerPlayers.EASY)) {
-			actual = true;
-		}
+        if (gameBoard.getNumberOfMatchedPairs() == 0) {
+            actual = true;
+        }
 
-		assertEquals(expected, actual);
-	}
+        assertTrue(actual);
+    }
 
-	public void testEnumFactory2() {
-		boolean expected = true;
-		boolean actual = false;
+    public void testEnumFactory2() {
 
-		ComputerPlayers[] computerPlayers = ComputerPlayers.values();
+        boolean actual = false;
 
-		for (ComputerPlayers computerPlayer : computerPlayers) {
-			System.out.println(computerPlayer.getDescription());
-		}
+        ComputerPlayers[] computerPlayers = ComputerPlayers.values();
 
-		if (computerPlayers.length > 0) {
-			actual = true;
-		}
+        for (ComputerPlayers computerPlayer : computerPlayers) {
+            System.out.println(computerPlayer.getDescription());
+        }
 
-		assertEquals(expected, actual);
+        if (computerPlayers.length > 0) {
+            actual = true;
+        }
 
-	}
+        assertTrue(actual);
 
-	public void testToSolveGameWithComputerPlayerMoveEasy() {
-		boolean expected = true;
-		boolean actual = false;
+    }
 
-		ComputerPlayer cp = ComputerPlayers.EASY.createComputerPlayer(gameBoard
-				.getTotalSize());
+    public void testToSolveGameWithComputerPlayerMoveEasy() {
+        boolean actual = false;
 
-		while (gameBoard.getNumberOfMatchedPairs() != gameBoard
-				.getTotalNumberOfPairs()) {
-			cp.makeAComputerMove(gameBoard);
-			if (gameBoard.getNumberOfMatchedPairs() == gameBoard
-					.getTotalNumberOfPairs()) {
-				actual = true;
-				break;
-			}
-		}
+        ComputerPlayer cp = ComputerPlayers.EASY.createComputerPlayer(gameBoard
+                .getTotalSize());
 
-		System.out.println("ComputerPlayerEasy()"
-				+ gameBoard.getTotalNumberOfAttempts());
+        while (gameBoard.getNumberOfMatchedPairs() != gameBoard
+                .getTotalNumberOfPairs()) {
+            cp.makeAComputerMove(gameBoard);
+            if (gameBoard.getNumberOfMatchedPairs() == gameBoard
+                    .getTotalNumberOfPairs()) {
+                actual = true;
+                break;
+            }
+        }
 
-		assertEquals(expected, actual);
-	}
+        System.out.println("ComputerPlayerEasy()"
+                + gameBoard.getTotalNumberOfAttempts());
 
-	public void testToSolveGameWithComputerPlayerMoveAdvanced() {
-		boolean expected = true;
-		boolean actual = false;
+        assertTrue(actual);
+    }
 
-		ComputerPlayer cp = ComputerPlayers.HARD.createComputerPlayer(gameBoard
-				.getTotalSize());
+    public void testToSolveGameWithComputerPlayerMoveAdvanced() {
+        boolean actual = false;
 
-		while (gameBoard.getNumberOfMatchedPairs() != gameBoard
-				.getTotalNumberOfPairs()) {
-			cp.makeAComputerMove(gameBoard);
-			if (gameBoard.getNumberOfMatchedPairs() == gameBoard
-					.getTotalNumberOfPairs()) {
-				actual = true;
-				break;
-			}
-		}
+        ComputerPlayer cp = ComputerPlayers.HARD.createComputerPlayer(gameBoard
+                .getTotalSize());
 
-		System.out.println("ComputerPlayerAdvanced()"
-				+ gameBoard.getTotalNumberOfAttempts());
+        while (gameBoard.getNumberOfMatchedPairs() != gameBoard
+                .getTotalNumberOfPairs()) {
+            cp.makeAComputerMove(gameBoard);
+            if (gameBoard.getNumberOfMatchedPairs() == gameBoard
+                    .getTotalNumberOfPairs()) {
+                actual = true;
+                break;
+            }
+        }
 
-		assertEquals(expected, actual);
-	}
+        System.out.println("ComputerPlayerAdvanced()"
+                + gameBoard.getTotalNumberOfAttempts());
+
+        assertTrue(actual);
+    }
 
 }

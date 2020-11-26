@@ -16,8 +16,6 @@ public interface GameObject {
 
     Position getPosition();
 
-    void setPosition(Position position);
-
     boolean isInNormalState();
 
     boolean hasTheSameValueAndTheSameCoordinates(GameObject gameObject);

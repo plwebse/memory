@@ -25,12 +25,10 @@ public enum ComputerPlayers {
 
 	public ComputerPlayer createComputerPlayer(int totalSize) {
 		switch (this) {
-		case EASY:
-			return new ComputerPlayerImpl(calculateEasy(totalSize));
 		case HARD:
 			return new ComputerPlayerImpl(totalSize);
 		default:
-			return null;
+			return new ComputerPlayerImpl(calculateEasy(totalSize));
 		}
 	}
 

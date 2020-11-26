@@ -75,10 +75,6 @@ public class GamePlayerVsComputerPlayer extends JPanel {
 		computerPlayerStatusPanel.updateAttempts(numberOfattempts);
 	}
 
-	public void startGame() {
-		this.gameBoard.startGame();
-	}
-
 	public void computerPlayerWon() {
 		String messageComputerPlayerWon = "Computer player won";
 		computerPlayerStatusPanel.updateStatus(messageComputerPlayerWon);

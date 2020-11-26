@@ -21,7 +21,7 @@ public interface GameBoard {
 
 	void pressObject(GameObject obj);
 
-	boolean isFull();
+	boolean noPressedObjectIsCorrect();
 
 	boolean isAMatch();
 

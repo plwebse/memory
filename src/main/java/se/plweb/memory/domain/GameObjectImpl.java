@@ -6,13 +6,11 @@ package se.plweb.memory.domain;
 
 public class GameObjectImpl implements GameObject {
 
-    private static final long serialVersionUID = 1L;
-
     private int value;
-    private Position position = new Position();
+    private final Position position;
     private GameObjectState state;
 
-    public GameObjectImpl(int value, Position position, GameObjectState gameObjectState) {
+    private GameObjectImpl(int value, Position position, GameObjectState gameObjectState) {
         this.value = value;
         this.position = position;
         setState(gameObjectState);
@@ -81,11 +79,6 @@ public class GameObjectImpl implements GameObject {
     }
 
     public synchronized Position getPosition() {
-        return position.clone();
+        return Position.clone(position);
     }
-
-    public synchronized void setPosition(Position position) {
-        this.position = position;
-    }
-
 }

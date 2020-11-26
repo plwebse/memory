@@ -11,9 +11,7 @@ import java.util.logging.*;
 
 public class Main {
     private static final Package memoryPackage = Main.class.getPackage();
-    /**
-     * @param args
-     */
+
     public static void main(String[] args) {
         new Gui(getVersionInfo());
 

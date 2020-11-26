@@ -22,7 +22,7 @@ public class PlayerVsCumputerPlayerPanel extends AbstractPanel implements
 	private final ComputerPlayers[] difficulties = ComputerPlayers.values();
 	private final JComboBox<String> cSelectDifficulty = new JComboBox<>(sDifficulties);
 	private final JButton bOk = new JButton("OK");
-	private Gui gui = null;
+	private Gui gui;
 
 	public PlayerVsCumputerPlayerPanel(Gui gui) {
 

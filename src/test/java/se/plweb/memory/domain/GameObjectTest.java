@@ -105,7 +105,7 @@ public class GameObjectTest extends TestCase {
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		GameObject t2 = GameObjectImpl.create(1, create(9, 9));
 
-		assertTrue(t1.equals(t2));
+		assertEquals(t1, t2);
 	}
 
 	public void testHashCode() {
@@ -118,14 +118,13 @@ public class GameObjectTest extends TestCase {
 
 	public void testHashCodeError() {
 
-		boolean expected = false;
-		boolean actual = false;
+		boolean actual;
 
 		GameObject t1 = GameObjectImpl.create(1, create(9, 9));
 		GameObject t2 = GameObjectImpl.create(1, create(8, 9));
 
 		actual = (t1.hashCode() == t2.hashCode());
 
-		assertEquals(expected, actual);
+		assertFalse(actual);
 	}
 }

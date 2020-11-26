@@ -2,7 +2,7 @@ package se.plweb.memory.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author Peter Lindblom
@@ -11,9 +11,9 @@ import java.util.Objects;
 public class ComputerPlayerImpl implements ComputerPlayer {
 
     private final List<GameObject> visitedGameObjects = new ArrayList<>();
+    private final int numberOfPressedGameObjectsToRemember;
     private int lastX = 0;
     private int lastY = 0;
-    private final int numberOfPressedGameObjectsToRemember;
 
     public ComputerPlayerImpl(int numberOfPressedGameObjectsToRemember) {
         this.numberOfPressedGameObjectsToRemember = numberOfPressedGameObjectsToRemember;
@@ -21,24 +21,19 @@ public class ComputerPlayerImpl implements ComputerPlayer {
 
     public void makeAComputerMove(GameBoard gameBoard) {
 
-        GameObject firstObjectToPress;
-        GameObject secondObjectToPress;
+        GameObject firstObjectToPress = visitedGameObjects.stream().findFirst()
+                .orElseGet(() -> findAObjectToPress(gameBoard));
 
-        if (visitedGameObjects.size() > 0) {
-            // Om det finns object som inte har blivit matchade använd de första
-            // objekten
-            firstObjectToPress = visitedGameObjects.get(0);
-            gameBoard.pressObject(firstObjectToPress);
-        } else {
-            // Om det inte finns object som inte har blivit matchade hitta ett
-            // nytt object
-            firstObjectToPress = findAObjectToPress(gameBoard);
-            addGameObjectToVisitedGameObjectsIfNotAlreadyThere(
-                    firstObjectToPress, numberOfPressedGameObjectsToRemember);
-            // press on firstObject
-            gameBoard.pressObject(firstObjectToPress);
-        }
+        GameObject secondObjectToPress = Optional.ofNullable(getAVisitedGameObjectWithTheSameValue(firstObjectToPress))
+                .orElseGet(() -> findAObjectToPress(gameBoard));
 
+        addGameObjectToVisitedGameObjectsIfNotAlreadyThere(firstObjectToPress, numberOfPressedGameObjectsToRemember);
+        addGameObjectToVisitedGameObjectsIfNotAlreadyThere(secondObjectToPress, numberOfPressedGameObjectsToRemember);
+
+        gameBoard.pressObject(firstObjectToPress);
+        gameBoard.pressObject(secondObjectToPress);
+
+        /*
         secondObjectToPress = getAVisitedGameObjectWithTheSameValue(firstObjectToPress);
 
         if (Objects.nonNull(secondObjectToPress)) {
@@ -49,7 +44,7 @@ public class ComputerPlayerImpl implements ComputerPlayer {
                     secondObjectToPress, numberOfPressedGameObjectsToRemember);
             gameBoard.pressObject(secondObjectToPress);
         }
-
+        */
         checkIfThePressObjectsIsAMatchOrNotAndClearsThePressedObjects(
                 gameBoard, firstObjectToPress, secondObjectToPress);
     }
@@ -68,13 +63,12 @@ public class ComputerPlayerImpl implements ComputerPlayer {
                 }
             }
 
-            Position tmpPosition = Position.create(lastX, lastY);
+            Position position = Position.create(lastX, lastY);
 
-            if (gameBoard.getGameObject(tmpPosition) != null
-                    && gameBoard.getGameObject(tmpPosition).isInNormalState()) {
-                gameObjectToPress = gameBoard.getGameObject(tmpPosition);
-                break;
-            }
+            gameObjectToPress = Optional.ofNullable(gameBoard.getGameObject(position))
+                    .filter(GameObject::isInNormalState)
+                    .orElse(null);
+
         }
         return gameObjectToPress;
     }
@@ -92,8 +86,7 @@ public class ComputerPlayerImpl implements ComputerPlayer {
 
         if (visitedGameObjects.size() > 0) {
             if (!visitedGameObjects.contains(gameObject)
-                    && numberOfPressedGameObjectsToRemember >= visitedGameObjects
-                    .size()) {
+                    && numberOfPressedGameObjectsToRemember >= visitedGameObjects.size()) {
                 visitedGameObjects.add(gameObject);
             }
         } else {
@@ -104,7 +97,7 @@ public class ComputerPlayerImpl implements ComputerPlayer {
     private void checkIfThePressObjectsIsAMatchOrNotAndClearsThePressedObjects(
             GameBoard gameBoard, GameObject firstObjectToPress,
             GameObject secondObjectToPress) {
-        if (gameBoard.isFull()) {
+        if (gameBoard.noPressedObjectIsCorrect()) {
             if (gameBoard.isAMatch()) {
                 visitedGameObjects.remove(firstObjectToPress);
                 visitedGameObjects.remove(secondObjectToPress);

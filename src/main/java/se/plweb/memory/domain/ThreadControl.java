@@ -75,24 +75,9 @@ public class ThreadControl {
 		threadPlayerVsComputerPlayer.start(gamePlayerVsComputerPlayer);
 	}
 
-	public synchronized void stopSinglePlayer() {
-		logger.log(Level.FINE, "stopSinglePlayer");
-		threadSinglePlayer.stop();
-	}
-
 	public synchronized void stopWaitForClient() {
 		logger.log(Level.FINE, "stopWaitForClient");
 		threadWaitForNetworkClient.stop();
-	}
-
-	public synchronized void stopServer() {
-		logger.log(Level.FINE, "stopServer");
-		threadNetworkServer.stop();
-	}
-
-	public synchronized void stopClient() {
-		logger.log(Level.FINE, "stopClient");
-		threadNetworkClient.stop();
 	}
 
 	public synchronized void stopAll() {

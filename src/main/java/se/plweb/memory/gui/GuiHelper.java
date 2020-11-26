@@ -61,7 +61,7 @@ public class GuiHelper {
 
     @Override
     public String toString() {
-        return "GuiHelper [colorValues=" + colorValues + ", displayValues="
+        return "GuiHelper [colorValues=" + Arrays.toString(colorValues) + ", displayValues="
                 + Arrays.toString(displayValues) + "]";
     }
 

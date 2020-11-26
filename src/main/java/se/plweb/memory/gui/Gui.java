@@ -136,10 +136,10 @@ public class Gui extends JFrame {
 
 	public void startServer(
 			GamePlayerVsNetworkPlayer gamePlayerVsNetworkPlayer, int port,
-			int ySize, int xSize) {
+			int xSize, int ySize) {
 		stopAll();
 		threadControl.startWaitForClient(gamePlayerVsNetworkPlayer, port,
-				ySize, xSize);
+				xSize, ySize);
 	}
 
 	public void startClient(

@@ -1,319 +1,314 @@
 package se.plweb.memory.gui;
 
-import static se.plweb.memory.domain.DimensionToSizeConverter.convert;
-import static se.plweb.memory.domain.PointToPositionConverter.convert;
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.logging.Logger;
-
 import se.plweb.memory.domain.*;
 import se.plweb.memory.gui.GameObjectGuiImpl.GUIState;
 
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.MouseInputListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.logging.Logger;
+
+import static se.plweb.memory.domain.DimensionToSizeConverter.convert;
+import static se.plweb.memory.domain.PointToPositionConverter.convert;
+
 /**
- * 
  * @author Peter Lindblom
  */
 
 public class GameBoardGui extends JPanel implements ActionListener {
 
-	private static final long serialVersionUID = 1L;
-	private static Logger logger;
-	protected final GameBoard gameBoard;
-	protected final Timer st = new Timer(30, this);
-	private Position hilightObject;
-	protected volatile boolean isPressed = false;
+    private static final long serialVersionUID = 1L;
+    private static Logger logger;
+    protected final GameBoard gameBoard;
+    protected final Timer st = new Timer(30, this);
+    private final FocusListener focusListener = new FocusAdapter() {
+        public void focusGained(FocusEvent e) {
+            super.focusGained(e);
+            boolean requestFocusInWindow = GameBoardGui.this
+                    .requestFocusInWindow();
+            logger.fine("focusGained requestFocusInWindow:"
+                    + requestFocusInWindow);
+        }
 
-	private final KeyListener keyListener = new KeyAdapter() {
-		public void keyPressed(KeyEvent e) {
-			logger.fine("keyPressed:" + e.getKeyCode());
+        public void focusLost(FocusEvent e) {
+            super.focusLost(e);
+            boolean requestFocusInWindow = GameBoardGui.this
+                    .requestFocusInWindow();
+            logger.fine("focusLost requestFocusInWindow:"
+                    + requestFocusInWindow);
+        }
+    };
+    protected volatile boolean isPressed = false;
+    private Position hilightObject;
+    private final KeyListener keyListener = new KeyAdapter() {
+        public void keyPressed(KeyEvent e) {
+            logger.fine("keyPressed:" + e.getKeyCode());
 
-			switch (e.getKeyCode()) {
-			case KeyEvent.VK_RIGHT:
-				moveRightIfPossible();
-				break;
-			case KeyEvent.VK_LEFT:
-				moveLeftIfPossible();
-				break;
-			case KeyEvent.VK_UP:
-				moveUpIfPossible();
-				break;
-			case KeyEvent.VK_DOWN:
-				moveDownIfPossible();
-				break;
-			case KeyEvent.VK_SPACE:
-				pressIfPossible(hilightObject);
-				break;
-			}
-			repaint();
-		}
-	};
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_RIGHT:
+                    moveRightIfPossible();
+                    break;
+                case KeyEvent.VK_LEFT:
+                    moveLeftIfPossible();
+                    break;
+                case KeyEvent.VK_UP:
+                    moveUpIfPossible();
+                    break;
+                case KeyEvent.VK_DOWN:
+                    moveDownIfPossible();
+                    break;
+                case KeyEvent.VK_SPACE:
+                    pressIfPossible(hilightObject);
+                    break;
+            }
+            repaint();
+        }
+    };
+    private final MouseInputListener mouseInputListener = new MouseInputAdapter() {
 
-	private final FocusListener focusListener = new FocusAdapter() {
-		public void focusGained(FocusEvent e) {
-			super.focusGained(e);
-			boolean requestFocusInWindow = GameBoardGui.this
-					.requestFocusInWindow();
-			logger.fine("focusGained requestFocusInWindow:"
-					+ requestFocusInWindow);
-		}
+        public void mouseMoved(MouseEvent e) {
+            Position mouse = convert(e.getPoint());
+			GameBoardGui.this.hilightObject = getGameObjectGuiPositionAtPosition(mouse);
+            repaint();
+        }
 
-		public void focusLost(FocusEvent e) {
-			super.focusLost(e);
-			boolean requestFocusInWindow = GameBoardGui.this
-					.requestFocusInWindow();
-			logger.fine("focusLost requestFocusInWindow:"
-					+ requestFocusInWindow);
-		}
-	};
+        public void mouseEntered(MouseEvent e) {
+            GameBoardGui.this.requestFocusInWindow();
+        }
 
-	private final MouseInputListener mouseInputListener = new MouseInputAdapter() {
+        public synchronized void mouseClicked(MouseEvent e) {
+            Position mouse = convert(e.getPoint());
+            Position gameObject = getGameObjectGuiPositionAtPosition(mouse);
+            pressIfPossible(gameObject);
+            repaint();
+        }
+    };
 
-		public void mouseMoved(MouseEvent e) {
-			Position mouse = convert(e.getPoint());
-			Position gameObject = getGameObjectGuiPositionAtPosition(mouse);
-			GameBoardGui.this.hilightObject = gameObject.clone();
-			repaint();
-		}
+    public GameBoardGui() {
+        logger = Logger.getLogger(this.getClass().getName());
+        gameBoard = new GameBoardImpl();
 
-		public void mouseEntered(MouseEvent e) {
-			GameBoardGui.this.requestFocusInWindow();
-		}
+        hilightObject = Position.create(0, 0);
+        setPreferredSize(new Dimension(600, 400));
+        setFocusable(true);
+        setEnabled(true);
 
-		public synchronized void mouseClicked(MouseEvent e) {
-			Position mouse = convert(e.getPoint());
-			Position gameObject = getGameObjectGuiPositionAtPosition(mouse);
-			pressIfPossible(gameObject);
-			repaint();
-		}
-	};
+        SwingUtilities.invokeLater(() -> {
+            logger.fine("InvokeLater requestFocusInWindow:"
+                    + GameBoardGui.this.requestFocusInWindow());
+            GameBoardGui.this.addMouseListener(mouseInputListener);
+            GameBoardGui.this.addMouseMotionListener(mouseInputListener);
+        });
 
-	public GameBoardGui() {
-		logger = Logger.getLogger(this.getClass().getName());
-		gameBoard = new GameBoardImpl();
+    }
 
-		hilightObject = Position.create(0, 0);
-		setPreferredSize(new Dimension(600, 400));
-		setFocusable(true);
-		setEnabled(true);
+    protected void paintGameBoard(Graphics g, Size gameObjectSize) {
 
-		SwingUtilities.invokeLater(() -> {
-			logger.fine("InvokeLater requestFocusInWindow:"
-					+ GameBoardGui.this.requestFocusInWindow());
-			GameBoardGui.this.addMouseListener(mouseInputListener);
-			GameBoardGui.this.addMouseMotionListener(mouseInputListener);
-		});
+        for (int y = 0; y < gameBoard.getXSize(); y++) {
+            for (int x = 0; x < gameBoard.getXSize(); x++) {
+                GUIState state;
+                if (hilightObject.equals(Position.create(x, y))) {
+                    state = GUIState.MOUSE_OVER;
+                } else {
+                    state = GUIState.NORMAL;
+                }
 
-	}
+                try {
+                    ((GameObjectGui) gameBoard
+                            .getGameObject(Position.create(x, y))).draw(g,
+                            gameObjectSize, state);
+                } catch (Exception e) {
+                    e.printStackTrace(System.out);
+                }
+            }
+        }
 
-	protected void paintGameBoard(Graphics g, Size gameObjectSize) {
+    }
 
-		for (int y = 0; y < gameBoard.getXSize(); y++) {
-			for (int x = 0; x < gameBoard.getXSize(); x++) {
-				GUIState state;
-				if (hilightObject.equals(Position.create(x, y))) {
-					state = GUIState.MOUSE_OVER;
-				} else {
-					state = GUIState.NORMAL;
-				}
+    protected Size calculateGameObjectSize(Size gameBoardGuiSize, int xSize,
+                                           int ySize) {
+        try {
+            return Size.create((gameBoardGuiSize.getWidth() / xSize),
+                    (gameBoardGuiSize.getHeight() / ySize));
+        } catch (ArithmeticException e) {
+            return Size.create(0, 0);
+        }
+    }
 
-				try {					
-					((GameObjectGui) gameBoard
-							.getGameObject(new Position(x, y))).draw(g,
-							gameObjectSize, state);
-				} catch (Exception e) {
-					e.printStackTrace(System.out);
-				}
-			}
-		}
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        paintGameBoard(g, calculateGameObjectSize(convert(this.getSize()),
+                gameBoard.getXSize(), gameBoard.getYSize()));
+    }
 
-	}
+    private void moveRightIfPossible() {
+        if (hilightObject.getXPos() < (gameBoard.getXSize() - 1)) {
+            hilightObject.moveRight();
+        }
+    }
 
-	protected Size calculateGameObjectSize(Size gameBoardGuiSize, int xSize,
-			int ySize) {
-		try {
-			return Size.create((gameBoardGuiSize.getWidth() / xSize),
-					(gameBoardGuiSize.getHeight() / ySize));
-		} catch (ArithmeticException e) {
-			return Size.create(0, 0);
-		}
-	}
+    private void moveLeftIfPossible() {
+        if (hilightObject.getXPos() > 0) {
+            hilightObject.moveLeft();
+        }
+    }
 
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		paintGameBoard(g, calculateGameObjectSize(convert(this.getSize()),
-				gameBoard.getXSize(), gameBoard.getYSize()));
-	}
+    private void moveUpIfPossible() {
+        if (hilightObject.getYPos() > 0) {
+            hilightObject.moveUp();
+        }
+    }
 
-	private void moveRightIfPossible() {
-		if (hilightObject.getXPos() < (gameBoard.getXSize() - 1)) {
-			hilightObject.moveRight();
-		}
-	}
+    private void moveDownIfPossible() {
+        if (hilightObject.getYPos() < (gameBoard.getYSize() - 1)) {
+            hilightObject.moveDown();
+        }
+    }
 
-	private void moveLeftIfPossible() {
-		if (hilightObject.getXPos() > 0) {
-			hilightObject.moveLeft();
-		}
-	}
+    private synchronized void pressIfPossible(Position gameObjectPosition) {
+        pair(gameBoard.getGameObject(gameObjectPosition));
+    }
 
-	private void moveUpIfPossible() {
-		if (hilightObject.getYPos() > 0) {
-			hilightObject.moveUp();
-		}
-	}
+    private synchronized Position getGameObjectGuiPositionAtPosition(
+            Position position) {
+        for (int x = 0; x < gameBoard.getXSize(); x++) {
+            for (int y = 0; y < gameBoard.getYSize(); y++) {
+                if (((GameObjectGui) gameBoard
+                        .getGameObject(Position.create(x, y)))
+                        .isPositionInsideOfGameObject(position)) {
+                    return Position.create(x, y);
+                }
+            }
+        }
+        return Position.create(-1, -1);
+    }
 
-	private void moveDownIfPossible() {
-		if (hilightObject.getYPos() < (gameBoard.getYSize() - 1)) {
-			hilightObject.moveDown();
-		}
-	}
+    public synchronized void actionPerformed(ActionEvent obj) {
+        this.requestFocusInWindow();
 
-	private synchronized void pressIfPossible(Position gameObjectPosition) {		
-		pair(gameBoard.getGameObject(gameObjectPosition));	
-	}
+        if (obj.getSource() == st) {
+            logger.fine("Timer");
+            gameBoard.clearPressedObjects();
+            this.enableObjects();
+            st.stop();
+            this.isPressed = false;
+            this.doAfterTimerEvent();
+        }
+    }
 
-	private synchronized Position getGameObjectGuiPositionAtPosition(
-			Position position) {
-		for (int x = 0; x < gameBoard.getXSize(); x++) {
-			for (int y = 0; y < gameBoard.getYSize(); y++) {
-				if (((GameObjectGui) gameBoard
-						.getGameObject(new Position(x, y)))
-						.isPositionInsideOfGameObject(position)) {
-					return Position.create(x, y);
-				}
-			}
-		}
-		return Position.create(-1, -1);
-	}
+    protected synchronized void doAfterTimerEvent() {
+        repaint();
+    }
 
-	public synchronized void actionPerformed(ActionEvent obj) {
-		this.requestFocusInWindow();
+    public synchronized int getNumberOfMatchedPairs() {
+        return gameBoard.getNumberOfMatchedPairs();
+    }
 
-		if (obj.getSource() == st) {
-			logger.fine("Timer");
-			gameBoard.clearPressedObjects();
-			this.enableObjects();
-			st.stop();
-			this.isPressed = false;
-			this.doAfterTimerEvent();
-		}
-	}
+    public synchronized void pair(GameObject gameObject) {
+        if (!isPressed) {
+            gameBoard.pressObject(gameObject);
 
-	protected synchronized void doAfterTimerEvent(){
-		repaint();
-	}
-	
-	public synchronized int getNumberOfMatchedPairs() {
-		return gameBoard.getNumberOfMatchedPairs();
-	}
+            if (gameBoard.noPressedObjectIsCorrect() && gameBoard.isAMatch()) {
+                this.isPressed = true;
+                this.disableObjects();
+                st.setInitialDelay(1000);
+                st.start();
+            } else if (gameBoard.noPressedObjectIsCorrect() && !gameBoard.isAMatch()) {
+                this.isPressed = true;
+                this.disableObjects();
+                st.setInitialDelay(1000);
+                st.start();
+            }
+        }
+    }
 
-	public synchronized void pair(GameObject gameObject) {
-		if (!isPressed) {
-			gameBoard.pressObject(gameObject);
-	
-			if (gameBoard.isFull() && gameBoard.isAMatch()) {
-				this.isPressed = true;
-				this.disableObjects();
-				st.setInitialDelay(1000);
-				st.start();
-			} else if (gameBoard.isFull() && !gameBoard.isAMatch()) {
-				this.isPressed = true;
-				this.disableObjects();
-				st.setInitialDelay(1000);
-				st.start();
-			}
-		}
-	}
+    public synchronized int getTotalNumberOfPairs() {
+        return gameBoard.getTotalNumberOfPairs();
+    }
 
-	public synchronized int getTotalNumberOfPairs() {
-		return gameBoard.getTotalNumberOfPairs();
-	}
+    public synchronized int getTotalNumberOfAttempts() {
+        return gameBoard.getTotalNumberOfAttempts();
+    }
 
-	public synchronized int getTotalNumberOfAttempts() {
-		return gameBoard.getTotalNumberOfAttempts();
-	}
+    public void makeGameBoard(int xSize, int ySize) {
+        int value = 1;
+        int i = 1;
+        int valueDirectionCount = 0;
+        gameBoard.newEmptyGameBoard(xSize, ySize);
+        GuiHelper guiHelper = GuiHelper.create(gameBoard.getTotalNumberOfPairs());
+        // GUI settings
+        this.setLayout(new GridLayout(xSize, ySize));
 
-	public void makeGameBoard(int xSize, int ySize) {
-		int value = 1;
-		int i = 1;
-		int valueDirectionCount = 0;
-		gameBoard.newEmptyGameBoard(xSize, ySize);
-		GuiHelper guiHelper = GuiHelper.create(gameBoard.getTotalNumberOfPairs());
-		// GUI settings
-		this.setLayout(new GridLayout(xSize, ySize));
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < ySize; y++) {
+                Position tmpPosition = Position.create(x, y);
+                GameObjectGui gameObjectGui = new GameObjectGuiImpl(value, tmpPosition, guiHelper);
+                gameObjectGui.setState(GameObjectState.PRESSED_STATE);
+                gameBoard.setGameObject(gameObjectGui);
 
-		for (int x = 0; x < xSize; x++) {
-			for (int y = 0; y < ySize; y++) {
-				Position tmpPosition = Position.create(x, y);
-				GameObjectGui gameObjectGui = new GameObjectGuiImpl(value, tmpPosition, guiHelper);								
-				gameObjectGui.setState(GameObjectState.PRESSED_STATE);
-				gameBoard.setGameObject(gameObjectGui);
+                if (i % 2 == 0) {
+                    value++;
+                    valueDirectionCount++;
+                }
+                i++;
 
-				if (i % 2 == 0) {
-					value++;					
-					valueDirectionCount++;					
-				}
-				i++;
-				
-				
-				if(valueDirectionCount == 4){
-					valueDirectionCount=0;
-				}	
-			}
-		}
-	}
 
-	public void startGame() {
-		gameBoard.startGame();		
-		boolean requestFocusInWindow = this.requestFocusInWindow();
-		logger.fine("startGame requestFocusInWindow:" + requestFocusInWindow);
-		if (this.getKeyListeners().length < 1) {
-			logger.fine("this.addKeyListener");
-			this.addKeyListener(keyListener);
-		}
+                if (valueDirectionCount == 4) {
+                    valueDirectionCount = 0;
+                }
+            }
+        }
+    }
 
-		if (this.getFocusListeners().length < 1) {
-			logger.fine("addFocusListener");
-			this.addFocusListener(focusListener);
-		}
+    public void startGame() {
+        gameBoard.startGame();
+        boolean requestFocusInWindow = this.requestFocusInWindow();
+        logger.fine("startGame requestFocusInWindow:" + requestFocusInWindow);
+        if (this.getKeyListeners().length < 1) {
+            logger.fine("this.addKeyListener");
+            this.addKeyListener(keyListener);
+        }
 
-	}
+        if (this.getFocusListeners().length < 1) {
+            logger.fine("addFocusListener");
+            this.addFocusListener(focusListener);
+        }
+    }
 
-	public void stopGame() {
-		st.stop();
-		gameBoard.stopGame();
-		logger.fine("stopGame");
-	}
+    public void stopGame() {
+        st.stop();
+        gameBoard.stopGame();
+        logger.fine("stopGame");
+    }
 
-	protected synchronized void disableObjects() {
-		for (int x = 0; x < gameBoard.getXSize(); x++) {
-			for (int y = 0; y < gameBoard.getYSize(); y++) {
-				Position tmpPosition = Position.create(x, y);
+    protected synchronized void disableObjects() {
+        for (int x = 0; x < gameBoard.getXSize(); x++) {
+            for (int y = 0; y < gameBoard.getYSize(); y++) {
+                Position tmpPosition = Position.create(x, y);
 
-				GameObject tmpGameObject = gameBoard.getGameObject(tmpPosition);
-				if (tmpGameObject.getState() == GameObjectState.NORMAL_STATE) {
-					tmpGameObject.setState(GameObjectState.DISABLED_STATE);
-					gameBoard.setGameObject(tmpGameObject);
-				}
-			}
-		}
-	}
+                GameObject tmpGameObject = gameBoard.getGameObject(tmpPosition);
+                if (tmpGameObject.getState() == GameObjectState.NORMAL_STATE) {
+                    tmpGameObject.setState(GameObjectState.DISABLED_STATE);
+                    gameBoard.setGameObject(tmpGameObject);
+                }
+            }
+        }
+    }
 
-	protected synchronized void enableObjects() {
-		for (int x = 0; x < gameBoard.getXSize(); x++) {
-			for (int y = 0; y < gameBoard.getYSize(); y++) {
-				Position tmpPosition = Position.create(x, y);
+    protected synchronized void enableObjects() {
+        for (int x = 0; x < gameBoard.getXSize(); x++) {
+            for (int y = 0; y < gameBoard.getYSize(); y++) {
+                Position tmpPosition = Position.create(x, y);
 
-				GameObject tmpGameObject = gameBoard.getGameObject(tmpPosition);
-				if (tmpGameObject.getState() == GameObjectState.DISABLED_STATE) {
-					tmpGameObject.setState(GameObjectState.NORMAL_STATE);
-					gameBoard.setGameObject(tmpGameObject);
-				}
-			}
-		}
-	}
+                GameObject tmpGameObject = gameBoard.getGameObject(tmpPosition);
+                if (tmpGameObject.getState() == GameObjectState.DISABLED_STATE) {
+                    tmpGameObject.setState(GameObjectState.NORMAL_STATE);
+                    gameBoard.setGameObject(tmpGameObject);
+                }
+            }
+        }
+    }
 }
