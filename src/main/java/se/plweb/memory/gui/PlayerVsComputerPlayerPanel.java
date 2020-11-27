@@ -13,7 +13,7 @@ import se.plweb.memory.domain.ComputerPlayers;
  * 
  */
 
-public class PlayerVsCumputerPlayerPanel extends AbstractPanel implements
+public class PlayerVsComputerPlayerPanel extends AbstractPanel implements
 		ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -24,7 +24,7 @@ public class PlayerVsCumputerPlayerPanel extends AbstractPanel implements
 	private final JButton bOk = new JButton("OK");
 	private final Gui gui;
 
-	public PlayerVsCumputerPlayerPanel(Gui gui) {
+	public PlayerVsComputerPlayerPanel(Gui gui) {
 
 		this.gui = gui;
 

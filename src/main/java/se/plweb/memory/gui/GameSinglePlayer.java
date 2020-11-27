@@ -44,10 +44,10 @@ public class GameSinglePlayer extends JPanel {
 	}
 
 	public void updateStatusSinglePlayerStatus(int matchedPairs,
-			int numberOfattempts) {
+			int numberOfAttempts) {
 		statusPanel
 				.updatePairStatus(matchedPairs, this.getTotalNumberOfParis());
-		statusPanel.updateAttempts(numberOfattempts);
+		statusPanel.updateAttempts(numberOfAttempts);
 	}
 
 	public int getNumberOfAttempts() {

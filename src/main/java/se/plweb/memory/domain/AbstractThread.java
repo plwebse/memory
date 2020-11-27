@@ -2,33 +2,47 @@ package se.plweb.memory.domain;
 
 /**
  * @author Peter Lindblom
- * 
  */
 
 public abstract class AbstractThread implements Runnable {
-	protected final Thread thread = new Thread(this);
-	protected volatile boolean running = false;
-	protected volatile boolean firstTime = true;
+    protected final Thread thread = new Thread(this);
+    protected volatile boolean running = false;
+    protected volatile boolean firstTime = true;
+    protected volatile boolean applicationRunning = true;
 
-	protected synchronized boolean isRunning() {
-		return running;
-	}
+    protected synchronized boolean isApplicationRunning() {
+        return applicationRunning;
+    }
 
-	protected synchronized void setRunning(boolean running) {
-		this.running = running;
-	}
+    protected synchronized void setApplicationRunningToFalse() {
+        this.applicationRunning = false;
+    }
 
-	protected synchronized boolean isFirstTime() {
-		return firstTime;
-	}
+    public synchronized void stopApplicationRunning() {
+        if (isApplicationRunning()) {
+            setApplicationRunningToFalse();
+        }
+    }
 
-	protected synchronized void setFirstTime() {
-		this.firstTime = false;
-	}
+    protected synchronized boolean isRunning() {
+        return running;
+    }
 
-	public synchronized void stop() {
-		if (isRunning()) {
-			setRunning(false);
-		}
-	}
+    protected synchronized void setRunning(boolean running) {
+        this.running = running;
+    }
+
+    protected synchronized boolean isFirstTime() {
+        return firstTime;
+    }
+
+    protected synchronized void setFirstTimeToFalse() {
+        this.firstTime = false;
+    }
+
+    public synchronized void stop() {
+        if (isRunning()) {
+            setRunning(false);
+        }
+    }
 }

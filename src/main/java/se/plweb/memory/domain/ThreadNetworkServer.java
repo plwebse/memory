@@ -38,7 +38,7 @@ public class ThreadNetworkServer extends AbstractThread implements Runnable {
 
 		if (isFirstTime()) {
 			this.thread.start();
-			setFirstTime();
+			setFirstTimeToFalse();
 			logger.log(Level.FINE, "firstTime");
 		}
 
@@ -50,7 +50,7 @@ public class ThreadNetworkServer extends AbstractThread implements Runnable {
 	}
 
 	public void run() {
-		while (true) {
+		while (isApplicationRunning()) {
 			if (isRunning()) {
 				if (!socket.isConnected()) {
 					gamePlayerVsNetworkPlayer.disConnected();
@@ -75,42 +75,32 @@ public class ThreadNetworkServer extends AbstractThread implements Runnable {
 
 					while (isRunning()) {
 
-						if (gamePlayerVsNetworkPlayer.getMatchedPairs() == gamePlayerVsNetworkPlayer
-								.getTotalNumberOfParis()) {
+						if (gamePlayerVsNetworkPlayer.getMatchedPairs() == gamePlayerVsNetworkPlayer.getTotalNumberOfParis()) {
 							pw.println(ProtocolConstants.WON);
 							pw.flush();
 							gamePlayerVsNetworkPlayer.serverWon();
-							logger.log(Level.FINE,
-									"gamePlayerVsNetworkPlayer.serverWon();");
+							logger.log(Level.FINE, "gamePlayerVsNetworkPlayer.serverWon();");
 							break;
 						} else {
-							gamePlayerVsNetworkPlayer
-									.updateStatusServer(
-											gamePlayerVsNetworkPlayer
-													.getMatchedPairs(),
-											gamePlayerVsNetworkPlayer
-													.getTotalNumberOfAttempts());
-							pw
-									.println(ProtocolConstants.MATCHED_PAIRS_AND_ATTEMPTS
+							gamePlayerVsNetworkPlayer.updateStatusServer(
+											gamePlayerVsNetworkPlayer.getMatchedPairs(),
+											gamePlayerVsNetworkPlayer.getTotalNumberOfAttempts());
+							pw.println(ProtocolConstants.MATCHED_PAIRS_AND_ATTEMPTS
 											+ ProtocolConstants.SPACE
-											+ gamePlayerVsNetworkPlayer
-													.getMatchedPairs()
+											+ gamePlayerVsNetworkPlayer.getMatchedPairs()
 											+ ProtocolConstants.SPACE
-											+ gamePlayerVsNetworkPlayer
-													.getTotalNumberOfAttempts());
+											+ gamePlayerVsNetworkPlayer.getTotalNumberOfAttempts());
 							pw.flush();
 
 							if (sc.hasNext()) {
 								String tmp = sc.next();
 								if (tmp
 										.equals(ProtocolConstants.MATCHED_PAIRS_AND_ATTEMPTS)) {
-									gamePlayerVsNetworkPlayer
-											.updateStatusClient(sc.nextInt(),
+									gamePlayerVsNetworkPlayer.updateStatusClient(sc.nextInt(),
 													sc.nextInt());
 								} else if (tmp.equals(ProtocolConstants.WON)) {
 									gamePlayerVsNetworkPlayer.clientWon();
-									logger.log(Level.FINE,
-													"gamePlayerVsNetworkPlayer.clientWon();");
+									logger.log(Level.FINE, "gamePlayerVsNetworkPlayer.clientWon();");
 									break;
 								}
 							}
@@ -126,8 +116,7 @@ public class ThreadNetworkServer extends AbstractThread implements Runnable {
 									if (tmpTimeStamp > timeStamp) {
 										timeStamp = tmpTimeStamp;
 									} else {
-										gamePlayerVsNetworkPlayer
-												.disConnected();
+										gamePlayerVsNetworkPlayer.disConnected();
 										logger.log(Level.FINE, "timeout");
 										break;
 									}

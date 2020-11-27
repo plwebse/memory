@@ -51,7 +51,7 @@ public class GamePlayerVsNetworkPlayer extends JPanel {
 	}
 
 	public void waitingForClient() {
-		String messageWaitingForClient = "wating for client...";
+		String messageWaitingForClient = "waiting for client...";
 		playerStatusPanelClient.updateStatus(messageWaitingForClient);
 		playerStatusPanelServer.updateStatus(messageWaitingForClient);
 	}
@@ -80,22 +80,22 @@ public class GamePlayerVsNetworkPlayer extends JPanel {
 		return gameBoard.getTotalNumberOfPairs();
 	}
 
-	public void updateStatusClient(int matchedPairs, int numberOfattempts) {
+	public void updateStatusClient(int matchedPairs, int numberOfAttempts) {
 		logger.fine("" + matchedPairs + " / "
 				+ this.getTotalNumberOfParis());
 		playerStatusPanelClient.updateStatus("");
 		playerStatusPanelClient.updatePairStatus(matchedPairs, this
 				.getTotalNumberOfParis());
-		playerStatusPanelClient.updateAttempts(numberOfattempts);
+		playerStatusPanelClient.updateAttempts(numberOfAttempts);
 	}
 
-	public void updateStatusServer(int matchedPairs, int numberOfattempts) {
+	public void updateStatusServer(int matchedPairs, int numberOfAttempts) {
 		logger.fine("" + matchedPairs + " / "
 				+ this.getTotalNumberOfParis());
 		playerStatusPanelServer.updateStatus("");
 		playerStatusPanelServer.updatePairStatus(matchedPairs, this
 				.getTotalNumberOfParis());
-		playerStatusPanelServer.updateAttempts(numberOfattempts);
+		playerStatusPanelServer.updateAttempts(numberOfAttempts);
 	}
 
 	public void clientWon() {

@@ -9,8 +9,7 @@ import se.plweb.memory.gui.GamePlayerVsComputerPlayer;
  * @author Peter Lindblom
  */
 
-public class ThreadPlayerVsComputerPlayer extends AbstractThread implements
-		Runnable {
+public class ThreadPlayerVsComputerPlayer extends AbstractThread implements Runnable {
 
 	private static Logger logger;
 	private GamePlayerVsComputerPlayer gamePlayerVsComputerPlayer;
@@ -24,7 +23,7 @@ public class ThreadPlayerVsComputerPlayer extends AbstractThread implements
 
 		if (isFirstTime()) {
 			thread.start();
-			setFirstTime();
+			setFirstTimeToFalse();
 		}
 
 		if (!isRunning()) {
@@ -33,7 +32,7 @@ public class ThreadPlayerVsComputerPlayer extends AbstractThread implements
 	}
 
 	public void run() {
-		while (true) {
+		while (isApplicationRunning()) {
 			if (isRunning()) {
 				try {
 					while (true) {

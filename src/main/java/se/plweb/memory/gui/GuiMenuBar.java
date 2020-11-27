@@ -50,7 +50,7 @@ public class GuiMenuBar extends JMenuBar implements ActionListener {
 	
 	public void actionPerformed(ActionEvent event) {		
 		if (event.getSource() == miExit) {
-			System.exit(0);
+			gui.stopApplication();
 		} else if (event.getSource() == miNewSinglePlayer) {			
 			gui.showPanel(GamePanel.singlePlayerPanel);			
 		} else if (event.getSource() == miAbout) {

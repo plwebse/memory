@@ -21,7 +21,6 @@ public class Gui extends JFrame {
 	// cardLayout
 	private final JPanel pCards = new JPanel(new CardLayout());
 	private final CardLayout cardLayout = (CardLayout) (pCards.getLayout());
-	// meny
 
 	// game panel
 	private GameSinglePlayer panelGameSinglePlayer = null;
@@ -41,7 +40,7 @@ public class Gui extends JFrame {
 		PlayerVsNetworkPlayerPanel playerVsNetworkPlayerPanel = new PlayerVsNetworkPlayerPanel(
 				this);
 		pCards.add(playerVsNetworkPlayerPanel, GamePanel.playerVsNetworkPlayerPanel.toString());
-		PlayerVsCumputerPlayerPanel playerVsComputerPlayerPanel = new PlayerVsCumputerPlayerPanel(
+		PlayerVsComputerPlayerPanel playerVsComputerPlayerPanel = new PlayerVsComputerPlayerPanel(
 				this);
 		pCards.add(playerVsComputerPlayerPanel, GamePanel.playerVsComputerPlayerPanel.toString());
 		AboutTheGamePanel aboutTheGamePanel = new AboutTheGamePanel();
@@ -190,4 +189,8 @@ public class Gui extends JFrame {
 		this.panelGamePlayerVsComputerPlayer = panelGamePlayerVsComputerPlayer;
 	}
 
+	public void stopApplication(){
+		threadControl.stopApplication();
+		System.exit(0);
+	}
 }

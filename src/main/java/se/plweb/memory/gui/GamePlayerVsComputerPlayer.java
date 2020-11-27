@@ -62,17 +62,17 @@ public class GamePlayerVsComputerPlayer extends JPanel {
 		return computerPlayersGameBoard.getTotalNumberOfAttempts();
 	}
 
-	public void updateHumanPlayerStatus(int matchedPairs, int numberOfattempts) {
+	public void updateHumanPlayerStatus(int matchedPairs, int numberOfAttempts) {
 		humanPlayerStatusPanel.updatePairStatus(matchedPairs, this
 				.getTotalNumberOfParis());
-		humanPlayerStatusPanel.updateAttempts(numberOfattempts);
+		humanPlayerStatusPanel.updateAttempts(numberOfAttempts);
 	}
 
 	public void updateComputerPlayerStatus(int matchedPairs,
-			int numberOfattempts) {
+			int numberOfAttempts) {
 		computerPlayerStatusPanel.updatePairStatus(matchedPairs, this
 				.getTotalNumberOfParis());
-		computerPlayerStatusPanel.updateAttempts(numberOfattempts);
+		computerPlayerStatusPanel.updateAttempts(numberOfAttempts);
 	}
 
 	public void computerPlayerWon() {

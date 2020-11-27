@@ -22,7 +22,7 @@ public class ThreadSinglePlayer extends AbstractThread implements Runnable {
 
         if (isFirstTime()) {
             thread.start();
-            setFirstTime();
+            setFirstTimeToFalse();
         }
 
         if (!isRunning()) {
@@ -31,7 +31,7 @@ public class ThreadSinglePlayer extends AbstractThread implements Runnable {
     }
 
     public void run() {
-        while (true) {
+        while (isApplicationRunning()) {
             if (isRunning()) {
                 try {
                     gameSinglePlayer.startGame();
@@ -48,7 +48,6 @@ public class ThreadSinglePlayer extends AbstractThread implements Runnable {
                         Thread.sleep(30);
                     }
                 } catch (Exception e) {
-
                     break;
                 }
             } else {
