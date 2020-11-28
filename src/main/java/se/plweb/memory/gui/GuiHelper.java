@@ -19,7 +19,7 @@ public class GuiHelper {
         }
     }
 
-    public static GuiHelper create(int totalNumberOfPairs){
+    public static GuiHelper create(int totalNumberOfPairs) {
         return new GuiHelper(totalNumberOfPairs);
     }
 
@@ -67,9 +67,9 @@ public class GuiHelper {
 
     private enum ValueColor {
         BLACK(Color.BLACK),
-        RED(Color.RED),
-        GREEN(Color.GREEN),
-        BLUE(Color.BLUE);
+        RED(new Color(175, 0, 0)),
+        GREEN(new Color(0, 175, 0)),
+        BLUE(new Color(0, 0, 175));
 
         private final Color color;
 

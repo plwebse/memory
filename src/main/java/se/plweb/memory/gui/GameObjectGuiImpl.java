@@ -22,6 +22,7 @@ public class GameObjectGuiImpl implements GameObjectGui {
     private final GuiHelper guiHelper;
     private int width, height, xTopLeft, yTopLeft;
 
+
     public GameObjectGuiImpl(int value, Position position, GuiHelper guiHelper) {
         gameObject = GameObjectImpl.create(value, position);
         this.guiHelper = guiHelper;
@@ -39,7 +40,7 @@ public class GameObjectGuiImpl implements GameObjectGui {
         return gameObject.getPosition();
     }
 
-	public GameObjectState getState() {
+    public GameObjectState getState() {
         return gameObject.getState();
     }
 
@@ -61,31 +62,33 @@ public class GameObjectGuiImpl implements GameObjectGui {
 
     private void paintValue(Graphics graphics, int value) {
         graphics.setColor(guiHelper.getValueColor(value));
-        paintValueRect(graphics, value);
+        paintValueShape(graphics, value);
     }
 
-    private void paintValueRect(Graphics graphics, int value) {
+    private void paintValueShape(Graphics graphics, int value) {
 
-        int tmpValue = guiHelper.getDisplayValue(value);
-
-        int valueObjectWidth = calculateValueObjectWidth();
-        int valueObjectHeight = calculateValueObjectHeight();
+        char[] cValue = String.valueOf(value).toCharArray();
+        int cValueLength = cValue.length;
 
         int startX = calculateTopX();
         int startY = calculateTopY();
 
-        int xOffset = startX;
-        int yOffset = startY;
+        int xOffset = startX + getStringStartOffset(width, cValueLength);
+        int yOffset = startY + 20 + (height / 4);
+        float fontSize = (height / 2.2f) / 10;
 
-        for (int i = 0; i < tmpValue; i++) {
-            graphics.fillRect(xOffset, yOffset, valueObjectWidth, valueObjectHeight);
-            if ((i + 1) % 4 != 0) {
-                xOffset = xOffset + (valueObjectWidth + calculateValueObjectSpace(valueObjectWidth));
-            } else {
-                yOffset = yOffset + (valueObjectHeight + calculateValueObjectSpace(valueObjectHeight));
-                xOffset = startX;
-            }
-        }
+        paintString(graphics, cValue, cValueLength, xOffset, yOffset, fontSize);
+    }
+
+    private int getStringStartOffset(int width, int charLength) {
+        return (width / 2) - (width / 4) * (charLength);
+    }
+
+    private void paintString(Graphics graphics, char[] chars, int charsLength, int x, int y, float fontSize) {
+        Font currentFont = graphics.getFont();
+        graphics.setFont(currentFont.deriveFont(currentFont.getSize() * fontSize).deriveFont(Font.BOLD));
+        graphics.drawChars(chars, 0, charsLength, x, y);
+        graphics.setFont(currentFont);
     }
 
     private int calculateTopX() {
