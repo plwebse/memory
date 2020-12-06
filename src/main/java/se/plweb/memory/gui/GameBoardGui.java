@@ -255,7 +255,6 @@ public class GameBoardGui extends JPanel implements ActionListener {
                 }
                 i++;
 
-
                 if (valueDirectionCount == 4) {
                     valueDirectionCount = 0;
                 }
@@ -268,7 +267,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
         boolean requestFocusInWindow = this.requestFocusInWindow();
         logger.fine("startGame requestFocusInWindow:" + requestFocusInWindow);
         if (this.getKeyListeners().length < 1) {
-            logger.fine("this.addKeyListener");
+            logger.fine("addKeyListener");
             this.addKeyListener(keyListener);
         }
 

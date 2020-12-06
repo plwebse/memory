@@ -32,13 +32,13 @@ public class GameSinglePlayer extends JPanel {
 	}
 
 	public int getMatchedPairs() {
-		logger.fine("getNumberOfMatchedPairs"
+		logger.fine("getNumberOfMatchedPairs:"
 				+ gameBoard.getNumberOfMatchedPairs());
 		return gameBoard.getNumberOfMatchedPairs();
 	}
 
 	public int getTotalNumberOfParis() {
-		logger.fine("getNumberOfParis"
+		logger.fine("getNumberOfParis:"
 				+ gameBoard.getTotalNumberOfPairs());
 		return gameBoard.getTotalNumberOfPairs();
 	}

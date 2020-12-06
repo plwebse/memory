@@ -32,6 +32,7 @@ public class Main {
         if (Arrays.stream(args).anyMatch("debug"::equalsIgnoreCase)) {
             try {
                 Handler handler = new ConsoleHandler();
+                handler.setLevel(Level.ALL);
                 Logger.getLogger("se.plweb").addHandler(handler);
                 Logger.getLogger("se.plweb").setLevel(Level.ALL);
 

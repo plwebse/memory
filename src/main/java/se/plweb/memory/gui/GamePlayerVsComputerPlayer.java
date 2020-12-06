@@ -57,7 +57,7 @@ public class GamePlayerVsComputerPlayer extends JPanel {
 	}
 
 	public int getComputerPlayersNumberOfAttempts() {
-		logger.log(Level.FINE, "getComputerPlayersNumberOfAttempts="
+		logger.log(Level.FINE, "getComputerPlayersNumberOfAttempts:"
 				+ computerPlayersGameBoard.getTotalNumberOfAttempts());
 		return computerPlayersGameBoard.getTotalNumberOfAttempts();
 	}
