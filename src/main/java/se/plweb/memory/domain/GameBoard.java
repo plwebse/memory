@@ -1,5 +1,7 @@
 package se.plweb.memory.domain;
 
+import java.util.List;
+
 /**
  * @author Peter Lindblom
  * 
@@ -38,5 +40,7 @@ public interface GameBoard {
 	int getTotalNumberOfAttempts();
 
 	void newEmptyGameBoard(int xSize, int ySize);
+
+	List<Position> getPositions();
 
 }

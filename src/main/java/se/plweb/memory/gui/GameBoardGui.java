@@ -70,7 +70,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
 
         public void mouseMoved(MouseEvent e) {
             Position mouse = convert(e.getPoint());
-			GameBoardGui.this.highlightedObject = getGameObjectGuiPositionAtPosition(mouse);
+            GameBoardGui.this.highlightedObject = getGameObjectGuiPositionAtPosition(mouse);
             repaint();
         }
 
@@ -106,24 +106,23 @@ public class GameBoardGui extends JPanel implements ActionListener {
 
     protected void paintGameBoard(Graphics g, Size gameObjectSize) {
 
-        for (int y = 0; y < gameBoard.getXSize(); y++) {
-            for (int x = 0; x < gameBoard.getXSize(); x++) {
-                GUIState state;
-                if (highlightedObject.equals(Position.create(x, y))) {
-                    state = GUIState.MOUSE_OVER;
-                } else {
-                    state = GUIState.NORMAL;
-                }
-
-                try {
-                    ((GameObjectGui) gameBoard
-                            .getGameObject(Position.create(x, y))).draw(g,
-                            gameObjectSize, state);
-                } catch (Exception e) {
-                    e.printStackTrace(System.out);
-                }
+        gameBoard.getPositions().forEach(position -> {
+            GUIState state;
+            if (highlightedObject.equals(position)) {
+                state = GUIState.MOUSE_OVER;
+            } else {
+                state = GUIState.NORMAL;
             }
-        }
+
+            try {
+                ((GameObjectGui) gameBoard
+                        .getGameObject(position)).draw(g,
+                        gameObjectSize, state);
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
+        });
+
 
     }
 
@@ -174,16 +173,13 @@ public class GameBoardGui extends JPanel implements ActionListener {
 
     private synchronized Position getGameObjectGuiPositionAtPosition(
             Position position) {
-        for (int x = 0; x < gameBoard.getXSize(); x++) {
-            for (int y = 0; y < gameBoard.getYSize(); y++) {
-                if (((GameObjectGui) gameBoard
-                        .getGameObject(Position.create(x, y)))
-                        .isPositionInsideOfGameObject(position)) {
-                    return Position.create(x, y);
-                }
-            }
-        }
-        return Position.create(-1, -1);
+        return gameBoard.getPositions()
+                .stream()
+                .filter(tmpPosition -> ((GameObjectGui) gameBoard
+                        .getGameObject(tmpPosition))
+                        .isPositionInsideOfGameObject(position))
+                .findFirst()
+                .orElse(Position.create(-1, -1));
     }
 
     public synchronized void actionPerformed(ActionEvent obj) {
@@ -242,22 +238,19 @@ public class GameBoardGui extends JPanel implements ActionListener {
         // GUI settings
         this.setLayout(new GridLayout(xSize, ySize));
 
-        for (int x = 0; x < xSize; x++) {
-            for (int y = 0; y < ySize; y++) {
-                Position tmpPosition = Position.create(x, y);
-                GameObjectGui gameObjectGui = new GameObjectGuiImpl(value, tmpPosition, guiHelper);
-                gameObjectGui.setState(GameObjectState.PRESSED_STATE);
-                gameBoard.setGameObject(gameObjectGui);
+        for (Position position : gameBoard.getPositions()) {
+            GameObjectGui gameObjectGui = new GameObjectGuiImpl(value, position, guiHelper);
+            gameObjectGui.setState(GameObjectState.PRESSED_STATE);
+            gameBoard.setGameObject(gameObjectGui);
 
-                if (i % 2 == 0) {
-                    value++;
-                    valueDirectionCount++;
-                }
-                i++;
+            if (i % 2 == 0) {
+                value++;
+                valueDirectionCount++;
+            }
+            i++;
 
-                if (valueDirectionCount == 4) {
-                    valueDirectionCount = 0;
-                }
+            if (valueDirectionCount == 4) {
+                valueDirectionCount = 0;
             }
         }
     }
@@ -284,30 +277,22 @@ public class GameBoardGui extends JPanel implements ActionListener {
     }
 
     protected synchronized void disableObjects() {
-        for (int x = 0; x < gameBoard.getXSize(); x++) {
-            for (int y = 0; y < gameBoard.getYSize(); y++) {
-                Position tmpPosition = Position.create(x, y);
-
-                GameObject tmpGameObject = gameBoard.getGameObject(tmpPosition);
-                if (tmpGameObject.getState() == GameObjectState.NORMAL_STATE) {
-                    tmpGameObject.setState(GameObjectState.DISABLED_STATE);
-                    gameBoard.setGameObject(tmpGameObject);
-                }
-            }
-        }
+        gameBoard.getPositions().stream()
+                .map(gameBoard::getGameObject)
+                .filter(GameObject::isInNormalState)
+                .forEach(gameObject -> {
+                    gameObject.setState(GameObjectState.DISABLED_STATE);
+                    gameBoard.setGameObject(gameObject);
+                });
     }
 
     protected synchronized void enableObjects() {
-        for (int x = 0; x < gameBoard.getXSize(); x++) {
-            for (int y = 0; y < gameBoard.getYSize(); y++) {
-                Position tmpPosition = Position.create(x, y);
-
-                GameObject tmpGameObject = gameBoard.getGameObject(tmpPosition);
-                if (tmpGameObject.getState() == GameObjectState.DISABLED_STATE) {
-                    tmpGameObject.setState(GameObjectState.NORMAL_STATE);
-                    gameBoard.setGameObject(tmpGameObject);
-                }
-            }
-        }
+        gameBoard.getPositions().stream()
+                .map(gameBoard::getGameObject)
+                .filter(gameObject -> gameObject.getState() == GameObjectState.DISABLED_STATE)
+                .forEach(gameObject -> {
+                    gameObject.setState(GameObjectState.NORMAL_STATE);
+                    gameBoard.setGameObject(gameObject);
+                });
     }
 }

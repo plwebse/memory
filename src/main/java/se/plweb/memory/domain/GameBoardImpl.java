@@ -32,25 +32,18 @@ public class GameBoardImpl implements GameBoard {
 
         this.randomizeGameObjectsValues();
         logger.fine("xSize=" + getXSize() + "ySize=" + getYSize());
-        for (int x = 0; x < getXSize(); x++) {
-            for (int y = 0; y < getYSize(); y++) {
-                getGameObject(Position.create(x, y)).setState(
-                        GameObjectState.NORMAL_STATE);
-            }
-        }
+
+        getPositions()
+                .forEach(position -> getGameObject(position).setState(GameObjectState.NORMAL_STATE));
     }
+
 
     private void randomizeGameObjectsValues() {
         List<Integer> values = addValuePairToList(getTotalNumberOfPairs());
 
-        for (int x = 0; x < getXSize(); x++) {
-            for (int y = 0; y < getYSize(); y++) {
-                Position tmpPosition = Position.create(x, y);
-                getGameObject(tmpPosition).setValue(
-                        returnARandomValueFromAListAndThenRemoveIt(values));
-
-            }
-        }
+        getPositions()
+                .forEach(position -> getGameObject(position).setValue(
+                        returnARandomValueFromAListAndThenRemoveIt(values)));
     }
 
     private List<Integer> addValuePairToList(Integer maxValue) {
@@ -76,12 +69,9 @@ public class GameBoardImpl implements GameBoard {
 
     public void stopGame() {
         logger.fine("xSize=" + getXSize() + "ySize=" + getYSize());
-        for (int x = 0; x < getXSize(); x++) {
-            for (int y = 0; y < getYSize(); y++) {
-                getGameObject(Position.create(x, y)).setState(
-                        GameObjectState.PRESSED_STATE);
-            }
-        }
+        getPositions().forEach(position -> getGameObject(position).setState(
+                GameObjectState.PRESSED_STATE));
+
     }
 
     public synchronized void pressObject(GameObject obj) {
@@ -280,5 +270,15 @@ public class GameBoardImpl implements GameBoard {
         }
 
         return gameObjectList;
+    }
+
+    public List<Position> getPositions() {
+        List<Position> positions = new ArrayList<>(); // TODO only create once??
+        for (int x = 0; x < this.getXSize(); x++) {
+            for (int y = 0; y < this.getYSize(); y++) {
+                positions.add(Position.create(x, y));
+            }
+        }
+        return positions;
     }
 }
