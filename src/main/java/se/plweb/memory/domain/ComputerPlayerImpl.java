@@ -72,12 +72,8 @@ public class ComputerPlayerImpl implements ComputerPlayer {
     private void addGameObjectToVisitedGameObjectsIfNotAlreadyThere(
             GameObject gameObject, int numberOfPressedGameObjectsToRemember) {
 
-        if (visitedGameObjects.size() > 0) {
-            if (!visitedGameObjects.contains(gameObject)
-                    && numberOfPressedGameObjectsToRemember >= visitedGameObjects.size()) {
-                visitedGameObjects.add(gameObject);
-            }
-        } else {
+        if(!visitedGameObjects.contains(gameObject)
+                && numberOfPressedGameObjectsToRemember >= visitedGameObjects.size()){
             visitedGameObjects.add(gameObject);
         }
     }

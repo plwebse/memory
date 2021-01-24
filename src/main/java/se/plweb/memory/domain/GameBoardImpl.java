@@ -19,6 +19,7 @@ public class GameBoardImpl implements GameBoard {
     private int totalNumberOfPairs;
     private int matchedPairs;
     private int totalNumberOfAttempts = 0;
+    private List<Position> positions = new ArrayList<>();
 
     public GameBoardImpl() {
         logger = Logger.getLogger(this.getClass().getName());
@@ -88,7 +89,8 @@ public class GameBoardImpl implements GameBoard {
     }
 
     public synchronized boolean noPressedObjectIsCorrect() { //TODO fix naming
-        return pressedObjects.stream().allMatch(Objects::nonNull) && pressedObjects.size() == pressedObjectsLength;
+        return pressedObjects.stream()
+                .allMatch(Objects::nonNull) && pressedObjects.size() == pressedObjectsLength;
     }
 
     public synchronized boolean isAMatch() {
@@ -137,7 +139,7 @@ public class GameBoardImpl implements GameBoard {
         setXSize(xSize);
         setYSize(ySize);
         setTotalSize(getXSize() * getYSize());
-
+        setPositions();
         gameBoard.clear();
         for (int i = 0; i < getTotalSize(); i++) {
             gameBoard.add(null);
@@ -147,11 +149,13 @@ public class GameBoardImpl implements GameBoard {
         setMatchedPairs(0);
     }
 
+
+
     public void makeGameBoard(int xSize, int ySize) {
 
         newEmptyGameBoard(xSize, ySize);
 
-        createGameObjects(xSize, ySize)
+        createGameObjects()
                 .forEach(this::setGameObject);
     }
 
@@ -253,32 +257,33 @@ public class GameBoardImpl implements GameBoard {
         return pressedObjects.size();
     }
 
-    private List<GameObject> createGameObjects(int xSize, int ySize) {
+    private List<GameObject> createGameObjects() {
         List<GameObject> gameObjectList = new ArrayList<>();
         int value = 1;
         int i = 1;
 
-        for (int x = 0; x < xSize; x++) {
-            for (int y = 0; y < ySize; y++) {
-                gameObjectList.add(GameObjectImpl.create(value, Position.create(x, y),
-                        GameObjectState.PRESSED_STATE));
-                if (i % 2 == 0) {
-                    value++;
-                }
-                i++;
+        for (Position position : getPositions()) {
+            gameObjectList.add(GameObjectImpl.create(value, position,
+                    GameObjectState.PRESSED_STATE));
+            if (i % 2 == 0) {
+                value++;
             }
+            i++;
         }
 
         return gameObjectList;
     }
 
-    public List<Position> getPositions() {
-        List<Position> positions = new ArrayList<>(); // TODO only create once??
+    private void setPositions() {
+        this.positions = new ArrayList<>();
         for (int x = 0; x < this.getXSize(); x++) {
             for (int y = 0; y < this.getYSize(); y++) {
                 positions.add(Position.create(x, y));
             }
         }
+    }
+
+    public List<Position> getPositions() {
         return positions;
     }
 }
