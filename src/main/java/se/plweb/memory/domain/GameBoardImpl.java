@@ -2,6 +2,7 @@ package se.plweb.memory.domain;
 
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 /**
  * @author Peter Lindblom
@@ -19,25 +20,21 @@ public class GameBoardImpl implements GameBoard {
     private int totalNumberOfPairs;
     private int matchedPairs;
     private int totalNumberOfAttempts = 0;
-    private List<Position> positions = new ArrayList<>();
+    private final List<Position> positions = new ArrayList<>();
 
     public GameBoardImpl() {
         logger = Logger.getLogger(this.getClass().getName());
-
-        for (int i = 0; i < pressedObjectsLength; i++) {
-            pressedObjects.add(null);
-        }
+        pressedObjects.addAll(Collections.nCopies(pressedObjectsLength, null));
     }
 
     public void startGame() {
 
         this.randomizeGameObjectsValues();
-        logger.fine("xSize=" + getXSize() + "ySize=" + getYSize());
+        logger.fine("xSize=" + getXSize() + ",ySize=" + getYSize());
 
         getPositions()
                 .forEach(position -> getGameObject(position).setState(GameObjectState.NORMAL_STATE));
     }
-
 
     private void randomizeGameObjectsValues() {
         List<Integer> values = addValuePairToList(getTotalNumberOfPairs());
@@ -50,10 +47,10 @@ public class GameBoardImpl implements GameBoard {
     private List<Integer> addValuePairToList(Integer maxValue) {
         List<Integer> values = Collections.synchronizedList(new ArrayList<>());
 
-        for (int currentValue = 1; currentValue <= maxValue; currentValue++) {
-            values.add(currentValue);
-            values.add(currentValue);
-        }
+        IntStream.rangeClosed(1, maxValue).forEach(value -> {
+            values.add(value);
+            values.add(value);
+        });
 
         return values;
     }
@@ -78,13 +75,13 @@ public class GameBoardImpl implements GameBoard {
     public synchronized void pressObject(GameObject obj) {
         logger.fine("pressObject:" + obj.toString());
         if (obj.isInNormalState()) {
-            for (int i = 0; i < getPressedObjectsLength(); i++) {
-                if (getAPressedObject(i) == null) {
-                    obj.setState(GameObjectState.PRESSED_STATE);
-                    setAPressedObjects(i, obj);
-                    break;
-                }
-            }
+            IntStream.range(0, getPressedObjectsLength())
+                    .filter(index -> Objects.isNull(getAPressedObject(index)))
+                    .findFirst()
+                    .ifPresent(index -> {
+                        obj.setState(GameObjectState.PRESSED_STATE);
+                        setAPressedObjects(index, obj);
+                    });
         }
     }
 
@@ -96,6 +93,7 @@ public class GameBoardImpl implements GameBoard {
     public synchronized boolean isAMatch() {
         GameObject lastGameObject = null;
         int matchedObjects = 0;
+
         for (int i = 0; i < getPressedObjectsLength(); i++) {
             GameObject currentGameObject = getAPressedObject(i);
             if (lastGameObject != null && currentGameObject != null &&
@@ -107,11 +105,11 @@ public class GameBoardImpl implements GameBoard {
         }
 
         if (matchedObjects == pressedObjectsLength - 1) {
-            for (int i = 0; i < getPressedObjectsLength(); i++) {
-                getAPressedObject(i).setState(GameObjectState.MATCHED_STATE);
-                setGameObject(changeStateAndGetGameObject(getAPressedObject(i)
+            IntStream.range(0, getPressedObjectsLength()).forEach(index -> {
+                getAPressedObject(index).setState(GameObjectState.MATCHED_STATE);
+                setGameObject(changeStateAndGetGameObject(getAPressedObject(index)
                         .getPosition(), GameObjectState.MATCHED_STATE));
-            }
+            });
 
             setMatchedPairs(getMatchedPairs() + 1);
             logger.fine("match");
@@ -123,14 +121,14 @@ public class GameBoardImpl implements GameBoard {
     }
 
     public synchronized void clearPressedObjects() {
-        for (int i = 0; i < getPressedObjectsLength(); i++) {
-            if (getAPressedObject(i) != null
-                    && getAPressedObject(i).getState() == GameObjectState.PRESSED_STATE) {
-                setGameObject(changeStateAndGetGameObject(getAPressedObject(i)
+        IntStream.range(0, getPressedObjectsLength()).forEach(index -> {
+            if (getAPressedObject(index) != null
+                    && getAPressedObject(index).getState() == GameObjectState.PRESSED_STATE) {
+                setGameObject(changeStateAndGetGameObject(getAPressedObject(index)
                         .getPosition(), GameObjectState.NORMAL_STATE));
             }
-            setAPressedObjects(i, null);
-        }
+            setAPressedObjects(index, null);
+        });
 
         setTotalNumberOfAttempts(getTotalNumberOfAttempts() + 1);
     }
@@ -141,14 +139,11 @@ public class GameBoardImpl implements GameBoard {
         setTotalSize(getXSize() * getYSize());
         setPositions();
         gameBoard.clear();
-        for (int i = 0; i < getTotalSize(); i++) {
-            gameBoard.add(null);
-        }
+        gameBoard.addAll(Collections.nCopies(getTotalSize(), null));
 
         setTotalNumberOfPairs(getTotalSize() / 2);
         setMatchedPairs(0);
     }
-
 
 
     public void makeGameBoard(int xSize, int ySize) {
@@ -275,7 +270,7 @@ public class GameBoardImpl implements GameBoard {
     }
 
     private void setPositions() {
-        this.positions = new ArrayList<>();
+        positions.clear();
         for (int x = 0; x < this.getXSize(); x++) {
             for (int y = 0; y < this.getYSize(); y++) {
                 positions.add(Position.create(x, y));
