@@ -2,6 +2,7 @@ package se.plweb.memory.domain;
 
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -28,7 +29,6 @@ public class GameBoardImpl implements GameBoard {
     }
 
     public void startGame() {
-
         this.randomizeGameObjectsValues();
         logger.fine("xSize=" + getXSize() + ",ySize=" + getYSize());
 
@@ -66,7 +66,7 @@ public class GameBoardImpl implements GameBoard {
     }
 
     public void stopGame() {
-        logger.fine("xSize=" + getXSize() + "ySize=" + getYSize());
+        logger.fine("xSize=" + getXSize() + ",ySize=" + getYSize());
         getPositions().forEach(position -> getGameObject(position).setState(
                 GameObjectState.PRESSED_STATE));
 
@@ -91,20 +91,11 @@ public class GameBoardImpl implements GameBoard {
     }
 
     public synchronized boolean isAMatch() {
-        GameObject lastGameObject = null;
-        int matchedObjects = 0;
+        Map<Position, Integer> positionValueMap = pressedObjects.stream()
+                .collect(Collectors.toMap(GameObject::getPosition, GameObject::getValue));
 
-        for (int i = 0; i < getPressedObjectsLength(); i++) {
-            GameObject currentGameObject = getAPressedObject(i);
-            if (lastGameObject != null && currentGameObject != null &&
-                    lastGameObject.hasTheSameValueAndNotTheSameCoordinates(currentGameObject)) {
-                matchedObjects++;
-            }
-
-            lastGameObject = getAPressedObject(i);
-        }
-
-        if (matchedObjects == pressedObjectsLength - 1) {
+        if (getDistinctCountEquals(positionValueMap.keySet(), getPressedObjectsLength())
+                && getDistinctCountEquals(positionValueMap.values(), 1)) {
             IntStream.range(0, getPressedObjectsLength()).forEach(index -> {
                 getAPressedObject(index).setState(GameObjectState.MATCHED_STATE);
                 setGameObject(changeStateAndGetGameObject(getAPressedObject(index)
@@ -114,10 +105,15 @@ public class GameBoardImpl implements GameBoard {
             setMatchedPairs(getMatchedPairs() + 1);
             logger.fine("match");
             return true;
-        } else {
-            logger.fine("no match");
-            return false;
         }
+        logger.fine("no match");
+        return false;
+    }
+
+    private boolean getDistinctCountEquals(Collection<?> collection, long expectedCount) {
+        return expectedCount == Optional.ofNullable(collection)
+                .map(c -> c.stream().distinct().count())
+                .orElse(0L);
     }
 
     public synchronized void clearPressedObjects() {

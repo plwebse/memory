@@ -12,8 +12,7 @@ public class ComputerPlayerImpl implements ComputerPlayer {
 
     private final List<GameObject> visitedGameObjects = new ArrayList<>();
     private final int numberOfPressedGameObjectsToRemember;
-    private int lastX = 0;
-    private int lastY = 0;
+    private int lastIndex = 0;
 
     public ComputerPlayerImpl(int numberOfPressedGameObjectsToRemember) {
         this.numberOfPressedGameObjectsToRemember = numberOfPressedGameObjectsToRemember;
@@ -38,25 +37,19 @@ public class ComputerPlayerImpl implements ComputerPlayer {
     }
 
     private GameObject findAObjectToPress(GameBoard gameBoard) {
+
         GameObject gameObjectToPress = null;
         while (gameObjectToPress == null) {
-            if (lastX < (gameBoard.getXSize() - 1)) {
-                lastX++;
-            } else {
-                lastX = 0;
-                if (lastY < (gameBoard.getYSize() - 1)) {
-                    lastY++;
-                } else {
-                    lastY = 0;
-                }
+            if (lastIndex >= gameBoard.getPositions().size()) {
+                lastIndex = 0;
             }
 
-            Position position = Position.create(lastX, lastY);
-
+            Position position = gameBoard.getPositions().get(lastIndex);
             gameObjectToPress = Optional.ofNullable(gameBoard.getGameObject(position))
                     .filter(GameObject::isInNormalState)
                     .orElse(null);
 
+            lastIndex++;
         }
         return gameObjectToPress;
     }
@@ -72,8 +65,8 @@ public class ComputerPlayerImpl implements ComputerPlayer {
     private void addGameObjectToVisitedGameObjectsIfNotAlreadyThere(
             GameObject gameObject, int numberOfPressedGameObjectsToRemember) {
 
-        if(!visitedGameObjects.contains(gameObject)
-                && numberOfPressedGameObjectsToRemember >= visitedGameObjects.size()){
+        if (!visitedGameObjects.contains(gameObject)
+                && numberOfPressedGameObjectsToRemember >= visitedGameObjects.size()) {
             visitedGameObjects.add(gameObject);
         }
     }

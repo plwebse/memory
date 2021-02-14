@@ -2,6 +2,8 @@ package se.plweb.memory.domain;
 
 import junit.framework.TestCase;
 
+import java.util.stream.Collectors;
+
 /**
  * @author Peter Lindblom
  */
@@ -13,7 +15,6 @@ public class GameBoardImplTest extends TestCase {
     }
 
     public void testSetGameBoard() {
-
         assertNotNull(gameBoard.getGameObject(Position.create(0, 0)));
     }
 
@@ -22,50 +23,25 @@ public class GameBoardImplTest extends TestCase {
     }
 
     public void testStartGame() {
-        boolean actual = true;
-
         gameBoard.startGame();
-        x:
-        for (int x = 0; x < gameBoard.getXSize(); x++) {
-            for (int y = 0; y < gameBoard.getYSize(); y++) {
-                Position tmpPosition = Position.create(x, y);
-                if (gameBoard.getGameObject(tmpPosition) != null
-                        && gameBoard.getGameObject(tmpPosition).getState() != GameObjectState.NORMAL_STATE) {
-                    actual = false;
-                    break x;
-                }
-            }
-        }
-
+        boolean actual = gameBoard.getPositions().stream()
+                .allMatch(position -> (gameBoard.getGameObject(position).getState() == GameObjectState.NORMAL_STATE));
         gameBoard.stopGame();
-
         assertTrue(actual);
     }
 
     public void testPressObject() {
-        int expected = 2;
-        int actual = 0;
-
         gameBoard.startGame();
 
-        x:
-        for (int x = 0; x < gameBoard.getXSize(); x++) {
-            for (int y = 0; y < gameBoard.getYSize(); y++) {
-                Position tmpPosition = Position.create(x, y);
+        int actual = gameBoard.getPositions().stream().filter(position -> {
+            gameBoard.pressObject(gameBoard.getGameObject(position));
+            return (gameBoard.getGameObject(position).getState() == GameObjectState.PRESSED_STATE);
+        }).collect(Collectors.toList()).size();
 
-                gameBoard.pressObject(gameBoard.getGameObject(tmpPosition));
-                if (gameBoard.getGameObject(tmpPosition).getState() == GameObjectState.PRESSED_STATE) {
-                    actual++;
-                }
-                if (gameBoard.noPressedObjectIsCorrect()) {
-                    break x;
-                }
-            }
-        }
+        assertTrue(gameBoard.noPressedObjectIsCorrect());
+        assertEquals(2, actual);
 
         gameBoard.stopGame();
-
-        assertEquals(expected, actual);
     }
 
     public void testIsFull() {
@@ -154,20 +130,12 @@ public class GameBoardImplTest extends TestCase {
     }
 
     public void testStopGame() {
-        boolean actual = true;
+
         gameBoard.startGame();
         gameBoard.stopGame();
-        x:
-        for (int x = 0; x < gameBoard.getXSize(); x++) {
-            for (int y = 0; y < gameBoard.getYSize(); y++) {
-                Position tmpPosition = Position.create(x, y);
-                if (gameBoard.getGameObject(tmpPosition) != null
-                        && gameBoard.getGameObject(tmpPosition).getState() != GameObjectState.PRESSED_STATE) {
-                    actual = false;
-                    break x;
-                }
-            }
-        }
+        boolean actual = gameBoard.getPositions().stream()
+                .allMatch(position -> gameBoard.getGameObject(position).getState() == GameObjectState.PRESSED_STATE);
+
         assertTrue(actual);
     }
 }

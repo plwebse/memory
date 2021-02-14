@@ -91,6 +91,6 @@ public class Position {
     }
 
     public String toString() {
-        return "Position x:" + getXPos() + " y:" + getYPos() + "\n";
+        return "Position x:" + getXPos() + ",y:" + getYPos() + "\n";
     }
 }
