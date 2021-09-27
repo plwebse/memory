@@ -141,6 +141,11 @@ public class GameObjectGuiImpl implements GameObjectGui {
         return this.gameObject.isInNormalState();
     }
 
+    @Override
+    public boolean isInDisabledState() {
+        return this.gameObject.isInDisabledState();
+    }
+
     public boolean hasTheSameValueAndNotTheSameCoordinates(GameObject gameObject) {
         return this.gameObject
                 .hasTheSameValueAndNotTheSameCoordinates(gameObject);

@@ -23,10 +23,9 @@ public enum ComputerPlayers {
     }
 
     public ComputerPlayer createComputerPlayer(int totalSize) {
-        if (this == ComputerPlayers.HARD) {
-            return new ComputerPlayerImpl(totalSize);
-        }
-        return new ComputerPlayerImpl(calculateEasy(totalSize));
+        return (this == ComputerPlayers.HARD) ?
+                new ComputerPlayerImpl(totalSize) :
+                new ComputerPlayerImpl(calculateEasy(totalSize));
     }
 
     private int calculateEasy(int totalSize) {

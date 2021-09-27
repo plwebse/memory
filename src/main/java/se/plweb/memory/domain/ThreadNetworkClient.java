@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  * @author Peter Lindblom
  */
 
-public class ThreadNetworkClient extends AbstractThread implements Runnable {
+public class ThreadNetworkClient extends AbstractThread {
 
     private static Logger logger;
     private GamePlayerVsNetworkPlayer gamePlayerVsNetworkPlayer;
@@ -24,6 +24,7 @@ public class ThreadNetworkClient extends AbstractThread implements Runnable {
 
     public ThreadNetworkClient() {
         logger = Logger.getLogger(this.getClass().getName());
+        this.setName(ThreadWaitForNetworkClient.class.getName());
     }
 
     public void start(GamePlayerVsNetworkPlayer gamePlayerVsNetworkPlayer,
@@ -31,7 +32,7 @@ public class ThreadNetworkClient extends AbstractThread implements Runnable {
         this.gamePlayerVsNetworkPlayer = gamePlayerVsNetworkPlayer;
 
         if (isFirstTime()) {
-            thread.start();
+            this.start();
             setFirstTimeToFalse();
         }
 
@@ -45,7 +46,7 @@ public class ThreadNetworkClient extends AbstractThread implements Runnable {
         }
     }
 
-    public void stop() {
+    public void stopThread() {
         if (isRunning()) {
             setRunning(false);
         }
@@ -121,19 +122,12 @@ public class ThreadNetworkClient extends AbstractThread implements Runnable {
                                     + Calendar.getInstance().getTimeInMillis());
                             pw.flush();
                         }
-                        Thread.sleep(30);
                     }
                 } catch (Exception e) {
                     logger.log(Level.FINE, e.getMessage());
                     break;
                 }
 
-            } else {
-                try {
-                    Thread.sleep(30);
-                } catch (Exception e) {
-                    logger.log(Level.FINE, e.getMessage());
-                }
             }
         }
     }

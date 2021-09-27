@@ -86,20 +86,20 @@ public class GameBoardImpl implements GameBoard {
     }
 
     public synchronized boolean noPressedObjectIsCorrect() { //TODO fix naming
-        return pressedObjects.stream()
-                .allMatch(Objects::nonNull) && pressedObjects.size() == pressedObjectsLength;
+        return (pressedObjects.size() == pressedObjectsLength) && pressedObjects.stream()
+                .allMatch(Objects::nonNull);
     }
 
     public synchronized boolean isAMatch() {
         Map<Position, Integer> positionValueMap = pressedObjects.stream()
-                .collect(Collectors.toMap(GameObject::getPosition, GameObject::getValue));
+                .collect(Collectors.toConcurrentMap(GameObject::getPosition, GameObject::getValue));
 
         if (getDistinctCountEquals(positionValueMap.keySet(), getPressedObjectsLength())
                 && getDistinctCountEquals(positionValueMap.values(), 1)) {
             IntStream.range(0, getPressedObjectsLength()).forEach(index -> {
-                getAPressedObject(index).setState(GameObjectState.MATCHED_STATE);
-                setGameObject(changeStateAndGetGameObject(getAPressedObject(index)
-                        .getPosition(), GameObjectState.MATCHED_STATE));
+                GameObject pressObject = getAPressedObject(index);
+                pressObject.setState(GameObjectState.MATCHED_STATE);
+                setGameObject(changeStateAndGetGameObject(pressObject.getPosition(), GameObjectState.MATCHED_STATE));
             });
 
             setMatchedPairs(getMatchedPairs() + 1);
@@ -118,11 +118,9 @@ public class GameBoardImpl implements GameBoard {
 
     public synchronized void clearPressedObjects() {
         IntStream.range(0, getPressedObjectsLength()).forEach(index -> {
-            if (getAPressedObject(index) != null
-                    && getAPressedObject(index).getState() == GameObjectState.PRESSED_STATE) {
-                setGameObject(changeStateAndGetGameObject(getAPressedObject(index)
-                        .getPosition(), GameObjectState.NORMAL_STATE));
-            }
+            Optional.ofNullable(getAPressedObject(index))
+                    .filter(gameObject -> GameObjectState.PRESSED_STATE.equals(gameObject.getState()))
+                    .ifPresent(gameObject -> setGameObject(changeStateAndGetGameObject(gameObject.getPosition(), GameObjectState.NORMAL_STATE)));
             setAPressedObjects(index, null);
         });
 

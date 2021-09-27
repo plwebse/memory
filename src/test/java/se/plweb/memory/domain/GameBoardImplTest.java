@@ -2,8 +2,6 @@ package se.plweb.memory.domain;
 
 import junit.framework.TestCase;
 
-import java.util.stream.Collectors;
-
 /**
  * @author Peter Lindblom
  */
@@ -33,13 +31,13 @@ public class GameBoardImplTest extends TestCase {
     public void testPressObject() {
         gameBoard.startGame();
 
-        int actual = gameBoard.getPositions().stream().filter(position -> {
+        long actual = gameBoard.getPositions().stream().filter(position -> {
             gameBoard.pressObject(gameBoard.getGameObject(position));
             return (gameBoard.getGameObject(position).getState() == GameObjectState.PRESSED_STATE);
-        }).collect(Collectors.toList()).size();
+        }).count();
 
         assertTrue(gameBoard.noPressedObjectIsCorrect());
-        assertEquals(2, actual);
+        assertEquals(2L, actual);
 
         gameBoard.stopGame();
     }
@@ -48,10 +46,8 @@ public class GameBoardImplTest extends TestCase {
 
         gameBoard.startGame();
 
-        gameBoard.pressObject(gameBoard.getGameObject(Position.create(
-                0, 0)));
-        gameBoard.pressObject(gameBoard.getGameObject(Position.create(
-                0, 1)));
+        gameBoard.pressObject(gameBoard.getGameObject(Position.create(0, 0)));
+        gameBoard.pressObject(gameBoard.getGameObject(Position.create(0, 1)));
         boolean actual = gameBoard.noPressedObjectIsCorrect();
 
         gameBoard.stopGame();
@@ -107,26 +103,29 @@ public class GameBoardImplTest extends TestCase {
     }
 
     public void testToSolveGameWithComputerPlayerMove() {
-        boolean actual = false;
 
-        gameBoard.startGame();
+        int counter = 0;
 
-        ComputerPlayer cp = ComputerPlayers.EASY.createComputerPlayer(gameBoard
-                .getTotalSize());
+        for (ComputerPlayers computerPlayer : ComputerPlayers.values()) {
+            gameBoard.makeGameBoard(10, 10);
+            gameBoard.startGame();
 
-        while (gameBoard.getNumberOfMatchedPairs() != gameBoard
-                .getTotalNumberOfPairs()) {
-            cp.makeAComputerMove(gameBoard);
-            if (gameBoard.getNumberOfMatchedPairs() == gameBoard
-                    .getTotalNumberOfPairs()) {
-                actual = true;
-                break;
+            ComputerPlayer cp = computerPlayer.createComputerPlayer(gameBoard
+                    .getTotalSize());
+
+            while (gameBoard.getNumberOfMatchedPairs() != gameBoard.getTotalNumberOfPairs()) {
+                cp.makeAComputerMove(gameBoard);
+                if (gameBoard.getNumberOfMatchedPairs() == gameBoard
+                        .getTotalNumberOfPairs()) {
+                    counter++;
+                    break;
+                }
             }
-        }
 
-        gameBoard.stopGame();
-        System.out.println(gameBoard.getTotalNumberOfAttempts());
-        assertTrue(actual);
+            gameBoard.stopGame();
+            System.out.println(gameBoard.getTotalNumberOfAttempts());
+        }
+        assertEquals(ComputerPlayers.values().length, counter);
     }
 
     public void testStopGame() {

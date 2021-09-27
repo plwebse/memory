@@ -82,12 +82,12 @@ public class ThreadControl {
 
     public synchronized void stopWaitForClient() {
         logger.log(Level.FINE, "stopWaitForClient");
-        threadWaitForNetworkClient.stop();
+        threadWaitForNetworkClient.stopThread();
     }
 
     public synchronized void stopAll() {
         logger.log(Level.FINE, "stopAll");
-        getAllThreads().forEach(AbstractThread::stop);
+        getAllThreads().forEach(AbstractThread::stopThread);
     }
 
     public synchronized void stopApplication() {

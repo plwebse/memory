@@ -18,7 +18,7 @@ public class AboutTheGamePanel extends AbstractPanel {
 		GridBagLayout gblAbout = new GridBagLayout();
 		gblAbout.setConstraints(lAbout, fixLayout(0));
 		this.add(lAbout);
-		JLabel lAboutUrl = new JLabel("http://www.plweb.se");
+		JLabel lAboutUrl = new JLabel("https://www.plweb.se");
 		gblAbout.setConstraints(lAboutUrl, fixLayout(1));
 		this.add(lAboutUrl);
 		this.setLayout(gblAbout);

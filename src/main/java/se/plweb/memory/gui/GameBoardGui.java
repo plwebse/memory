@@ -101,7 +101,6 @@ public class GameBoardGui extends JPanel implements ActionListener {
             GameBoardGui.this.addMouseListener(mouseInputListener);
             GameBoardGui.this.addMouseMotionListener(mouseInputListener);
         });
-
     }
 
     protected void paintGameBoard(Graphics g, Size gameObjectSize) {
@@ -122,8 +121,6 @@ public class GameBoardGui extends JPanel implements ActionListener {
                 e.printStackTrace(System.out);
             }
         });
-
-
     }
 
     protected Size calculateGameObjectSize(Size gameBoardGuiSize, int xSize,
@@ -206,13 +203,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
     public synchronized void pair(GameObject gameObject) {
         if (!isPressed) {
             gameBoard.pressObject(gameObject);
-
-            if (gameBoard.noPressedObjectIsCorrect() && gameBoard.isAMatch()) {
-                this.isPressed = true;
-                this.disableObjects();
-                st.setInitialDelay(1000);
-                st.start();
-            } else if (gameBoard.noPressedObjectIsCorrect() && !gameBoard.isAMatch()) {
+            if (gameBoard.noPressedObjectIsCorrect() && (gameBoard.isAMatch() || !gameBoard.isAMatch())) {
                 this.isPressed = true;
                 this.disableObjects();
                 st.setInitialDelay(1000);
@@ -289,7 +280,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
     protected synchronized void enableObjects() {
         gameBoard.getPositions().stream()
                 .map(gameBoard::getGameObject)
-                .filter(gameObject -> gameObject.getState() == GameObjectState.DISABLED_STATE)
+                .filter(GameObject::isInDisabledState)
                 .forEach(gameObject -> {
                     gameObject.setState(GameObjectState.NORMAL_STATE);
                     gameBoard.setGameObject(gameObject);

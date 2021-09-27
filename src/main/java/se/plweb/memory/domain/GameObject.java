@@ -18,6 +18,8 @@ public interface GameObject {
 
     boolean isInNormalState();
 
+    boolean isInDisabledState();
+
     boolean hasTheSameValueAndTheSameCoordinates(GameObject gameObject);
 
     boolean hasTheSameValueAndNotTheSameCoordinates(GameObject gameObject);

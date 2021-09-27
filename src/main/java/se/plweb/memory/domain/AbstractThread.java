@@ -4,8 +4,7 @@ package se.plweb.memory.domain;
  * @author Peter Lindblom
  */
 
-public abstract class AbstractThread implements Runnable {
-    protected final Thread thread = new Thread(this);
+public abstract class AbstractThread extends Thread {
     protected volatile boolean running = false;
     protected volatile boolean firstTime = true;
     protected volatile boolean applicationRunning = true;
@@ -40,7 +39,7 @@ public abstract class AbstractThread implements Runnable {
         this.firstTime = false;
     }
 
-    public synchronized void stop() {
+    public synchronized void stopThread() {
         if (isRunning()) {
             setRunning(false);
         }

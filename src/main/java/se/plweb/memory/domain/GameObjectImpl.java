@@ -44,6 +44,10 @@ public class GameObjectImpl implements GameObject {
         return GameObjectState.NORMAL_STATE.equals(getState());
     }
 
+    public synchronized boolean isInDisabledState() {
+        return GameObjectState.DISABLED_STATE.equals(getState());
+    }
+
     public synchronized boolean hasTheSameValueAndNotTheSameCoordinates(GameObject gameObject) {
         return gameObject.getValue() == this.getValue()
                 && !this.position.equals(gameObject.getPosition());

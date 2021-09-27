@@ -15,7 +15,7 @@ import se.plweb.memory.gui.GamePlayerVsNetworkPlayer;
  * @author Peter Lindblom
  */
 
-public class ThreadNetworkServer extends AbstractThread implements Runnable {
+public class ThreadNetworkServer extends AbstractThread {
 
 	private static Logger logger;
 	private Socket socket;
@@ -26,6 +26,7 @@ public class ThreadNetworkServer extends AbstractThread implements Runnable {
 
 	public ThreadNetworkServer() {
 		logger = Logger.getLogger(this.getClass().getName());
+		setName(this.getClass().getName());
 	}
 
 	public void start(Socket socket,
@@ -37,7 +38,7 @@ public class ThreadNetworkServer extends AbstractThread implements Runnable {
 		this.ySize = ySize;
 
 		if (isFirstTime()) {
-			this.thread.start();
+			start();
 			setFirstTimeToFalse();
 			logger.log(Level.FINE, "firstTime");
 		}
@@ -127,15 +128,7 @@ public class ThreadNetworkServer extends AbstractThread implements Runnable {
 								break;
 							}
 						}
-						Thread.sleep(30);
 					}
-				} catch (Exception e) {
-					logger.log(Level.WARNING, e.getMessage());
-					setRunning(false);
-				}
-			} else {
-				try {
-					Thread.sleep(30);
 				} catch (Exception e) {
 					logger.log(Level.WARNING, e.getMessage());
 					setRunning(false);

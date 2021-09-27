@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  * @author Peter Lindblom
  */
 
-public class ThreadWaitForNetworkClient extends AbstractThread implements Runnable {
+public class ThreadWaitForNetworkClient extends AbstractThread {
 
     private static Logger logger;
     private GamePlayerVsNetworkPlayer gameMultiPlayer;
@@ -22,6 +22,7 @@ public class ThreadWaitForNetworkClient extends AbstractThread implements Runnab
 
     public ThreadWaitForNetworkClient() {
         logger = Logger.getLogger(this.getClass().getName());
+        this.setName(this.getClass().getName());
     }
 
     public void start(GamePlayerVsNetworkPlayer gameMultiPlayer, int port,
@@ -33,7 +34,7 @@ public class ThreadWaitForNetworkClient extends AbstractThread implements Runnab
         this.xSize = xSize;
 
         if (isFirstTime()) {
-            this.thread.start();
+            this.start();
             logger.log(Level.FINE, "start firstTime=true");
             setFirstTimeToFalse();
         }
@@ -44,7 +45,7 @@ public class ThreadWaitForNetworkClient extends AbstractThread implements Runnab
         }
     }
 
-    public void stop() {
+    public void stopThread() {
         if (isRunning()) {
             logger.log(Level.FINE, "stop isRunning=true");
             closeServerSocket(serverSocket);
@@ -71,12 +72,6 @@ public class ThreadWaitForNetworkClient extends AbstractThread implements Runnab
                     logger.log(Level.WARNING, e.getMessage());
                 } finally {
                     closeServerSocket(serverSocket);
-                }
-            } else {
-                try {
-                    Thread.sleep(30);
-                } catch (Exception e) {
-                    logger.log(Level.WARNING, e.getMessage());
                 }
             }
         }
