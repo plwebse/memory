@@ -203,7 +203,8 @@ public class GameBoardGui extends JPanel implements ActionListener {
     public synchronized void pair(GameObject gameObject) {
         if (!isPressed) {
             gameBoard.pressObject(gameObject);
-            if (gameBoard.noPressedObjectIsCorrect() && (gameBoard.isAMatch() || !gameBoard.isAMatch())) {
+            gameBoard.isAMatch();
+            if (gameBoard.noPressedObjectIsCorrect()) {
                 this.isPressed = true;
                 this.disableObjects();
                 timer.setInitialDelay(1000);

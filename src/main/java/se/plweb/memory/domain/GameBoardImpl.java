@@ -179,7 +179,6 @@ public class GameBoardImpl implements GameBoard {
     }
 
     private synchronized int calculateListIndex(int x, int y) {
-        //logger.warning("listIndex:" + (y * xSize + x) + ", size:"+ getPositions().size());
         return y * xSize + x;
     }
 

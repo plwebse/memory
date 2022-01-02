@@ -3,7 +3,6 @@ package se.plweb.memory.gui;
 import se.plweb.memory.domain.*;
 
 import java.awt.*;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
@@ -23,7 +22,7 @@ public class GameObjectGuiImpl implements GameObjectGui {
     private final GameObject gameObject;
     private final GuiHelper guiHelper;
     private int width, height, xTopLeft, yTopLeft;
-    private static Logger logger = Logger.getLogger(GameObjectGuiImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(GameObjectGuiImpl.class.getName());
 
     public GameObjectGuiImpl(int value, Position position, GuiHelper guiHelper) {
         gameObject = GameObjectImpl.create(value, position);
@@ -159,7 +158,7 @@ public class GameObjectGuiImpl implements GameObjectGui {
 
     public void draw(Graphics graphics, Size size, GUIState guiState) {
         if (size == null) {
-            logger.warning("check size");
+            logger.warning("size is null");
             return;
         }
 
@@ -183,9 +182,6 @@ public class GameObjectGuiImpl implements GameObjectGui {
             case PRESSED_STATE:
                 paintBackground(graphics, BACKGROUND_COLOR, INACTIVE_BORDER_COLOR);
                 paintValue(graphics, gameObject.getValue());
-                break;
-            default:
-                logger.warning("hmm:" + this.gameObject);
                 break;
         }
 
