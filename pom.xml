@@ -8,16 +8,16 @@
 
 	<name>Memory</name>
 	<description>A simple Memory game done by me  Peter Lindblom. First version was made in 2008.</description>
-	<url>http://www.plweb.se</url>
+	<url>https://plweb.se</url>
 	<organization>
 		<name>Peter Lindblom</name>
-		<url>http://www.plweb.se</url>
+		<url>https://plweb.se</url>
 	</organization>
 	<developers>
 		<developer>
 			<name>Peter Lindblom</name>
 			<email>Peter.Lindblom@plweb.se</email>
-			<url>http://www.plweb.se</url>
+			<url>https://plweb.se</url>
 		</developer>
 	</developers>
 	<build>
@@ -84,7 +84,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

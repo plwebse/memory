@@ -74,6 +74,11 @@ public class Position {
         setXPos(getXPos() - numberOfSteps);
     }
 
+    public synchronized void moveTo(Position position){
+        this.xPos = position.getXPos();
+        this.yPos = position.getYPos();
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

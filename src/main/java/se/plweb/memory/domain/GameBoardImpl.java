@@ -21,7 +21,7 @@ public class GameBoardImpl implements GameBoard {
     private int totalNumberOfPairs;
     private int matchedPairs;
     private int totalNumberOfAttempts = 0;
-    private final List<Position> positions = new ArrayList<>();
+    private final List<Position> positions = Collections.synchronizedList(new ArrayList<>());
 
     public GameBoardImpl() {
         logger = Logger.getLogger(this.getClass().getName());
@@ -92,7 +92,7 @@ public class GameBoardImpl implements GameBoard {
 
     public synchronized boolean isAMatch() {
         Map<Position, Integer> positionValueMap = pressedObjects.stream()
-                .collect(Collectors.toConcurrentMap(GameObject::getPosition, GameObject::getValue));
+                .collect(Collectors.toConcurrentMap(GameObject::getPosition, GameObject::getValue, Math::max));
 
         if (getDistinctCountEquals(positionValueMap.keySet(), getPressedObjectsLength())
                 && getDistinctCountEquals(positionValueMap.values(), 1)) {
@@ -159,9 +159,9 @@ public class GameBoardImpl implements GameBoard {
             throw new IllegalArgumentException("Position cannot be null");
         }
 
-        int pos = calculateListPosition(position.getXPos(), position.getYPos());
+        int index = calculateListIndex(position.getXPos(), position.getYPos());
 
-        return gameBoard.get(pos);
+        return gameBoard.get(index);
     }
 
     public synchronized void setGameObject(GameObject gameObject) {
@@ -172,14 +172,15 @@ public class GameBoardImpl implements GameBoard {
                     "GameObjects Position cannot be null");
         }
 
-        int pos = calculateListPosition(gameObject.getPosition().getXPos(), gameObject.getPosition().getYPos());
+        int index = calculateListIndex(gameObject.getPosition().getXPos(), gameObject.getPosition().getYPos());
 
-        gameBoard.set(pos, gameObject);
+        gameBoard.set(index, gameObject);
 
     }
 
-    private int calculateListPosition(int x, int y) {
-        return y * getXSize() + x;
+    private synchronized int calculateListIndex(int x, int y) {
+        //logger.warning("listIndex:" + (y * xSize + x) + ", size:"+ getPositions().size());
+        return y * xSize + x;
     }
 
     public synchronized int getTotalNumberOfPairs() {
@@ -234,7 +235,7 @@ public class GameBoardImpl implements GameBoard {
         this.matchedPairs = matchedPairs;
     }
 
-    private GameObject getAPressedObject(int index) {
+    private synchronized GameObject getAPressedObject(int index) {
         return pressedObjects.get(index);
     }
 
@@ -242,7 +243,7 @@ public class GameBoardImpl implements GameBoard {
         this.pressedObjects.set(index, pressedObject);
     }
 
-    private int getPressedObjectsLength() {
+    private synchronized int getPressedObjectsLength() {
         return pressedObjects.size();
     }
 

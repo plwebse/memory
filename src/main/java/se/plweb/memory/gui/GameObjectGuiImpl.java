@@ -3,6 +3,8 @@ package se.plweb.memory.gui;
 import se.plweb.memory.domain.*;
 
 import java.awt.*;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 /**
  * @author Peter Lindblom
@@ -21,7 +23,7 @@ public class GameObjectGuiImpl implements GameObjectGui {
     private final GameObject gameObject;
     private final GuiHelper guiHelper;
     private int width, height, xTopLeft, yTopLeft;
-
+    private static Logger logger = Logger.getLogger(GameObjectGuiImpl.class.getName());
 
     public GameObjectGuiImpl(int value, Position position, GuiHelper guiHelper) {
         gameObject = GameObjectImpl.create(value, position);
@@ -156,10 +158,13 @@ public class GameObjectGuiImpl implements GameObjectGui {
     }
 
     public void draw(Graphics graphics, Size size, GUIState guiState) {
-        if (size != null) {
-            this.width = size.getWidth();
-            this.height = size.getHeight();
+        if (size == null) {
+            logger.warning("check size");
+            return;
         }
+
+        this.width = size.getWidth();
+        this.height = size.getHeight();
 
         xTopLeft = this.width * gameObject.getPosition().getXPos();
         yTopLeft = this.height * gameObject.getPosition().getYPos();
@@ -179,6 +184,9 @@ public class GameObjectGuiImpl implements GameObjectGui {
                 paintBackground(graphics, BACKGROUND_COLOR, INACTIVE_BORDER_COLOR);
                 paintValue(graphics, gameObject.getValue());
                 break;
+            default:
+                logger.warning("hmm:" + this.gameObject);
+                break;
         }
 
         if (guiState.equals(GUIState.MOUSE_OVER)) {
@@ -188,12 +196,11 @@ public class GameObjectGuiImpl implements GameObjectGui {
     }
 
     public boolean isPositionInsideOfGameObject(Position position) {
+        return position.getXPos() > xTopLeft
+                && position.getXPos() <= (xTopLeft + width)
+                && position.getYPos() > yTopLeft
+                && position.getYPos() <= (yTopLeft + height);
 
-        return position != null
-                && position.getXPos() >= xTopLeft
-                && position.getXPos() < (xTopLeft + width)
-                && position.getYPos() >= yTopLeft
-                && position.getYPos() < (yTopLeft + height);
     }
 
     private int divideBy2(int number) {

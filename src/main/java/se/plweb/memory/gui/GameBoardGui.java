@@ -8,6 +8,7 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import static se.plweb.memory.domain.DimensionToSizeConverter.convert;
@@ -22,7 +23,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
     private static final long serialVersionUID = 1L;
     private static Logger logger;
     protected final GameBoard gameBoard;
-    protected final Timer st = new Timer(30, this);
+    protected final Timer timer = new Timer(30, this);
     private final FocusListener focusListener = new FocusAdapter() {
         public void focusGained(FocusEvent e) {
             super.focusGained(e);
@@ -41,7 +42,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
         }
     };
     protected volatile boolean isPressed = false;
-    private Position highlightedObject;
+    private final Position highlightedObject;
     private final KeyListener keyListener = new KeyAdapter() {
         public void keyPressed(KeyEvent e) {
             logger.fine("keyPressed:" + e.getKeyCode());
@@ -63,15 +64,22 @@ public class GameBoardGui extends JPanel implements ActionListener {
                     pressIfPossible(highlightedObject);
                     break;
             }
+
             repaint();
         }
     };
     private final MouseInputListener mouseInputListener = new MouseInputAdapter() {
 
         public void mouseMoved(MouseEvent e) {
+
             Position mouse = convert(e.getPoint());
-            GameBoardGui.this.highlightedObject = getGameObjectGuiPositionAtPosition(mouse);
-            repaint();
+
+            getGameObjectGuiPositionAt(mouse)
+                    .ifPresent(position -> {
+                        highlightedObject.moveTo(position);
+                        repaint();
+                    });
+
         }
 
         public void mouseEntered(MouseEvent e) {
@@ -80,8 +88,8 @@ public class GameBoardGui extends JPanel implements ActionListener {
 
         public synchronized void mouseClicked(MouseEvent e) {
             Position mouse = convert(e.getPoint());
-            Position gameObject = getGameObjectGuiPositionAtPosition(mouse);
-            pressIfPossible(gameObject);
+            getGameObjectGuiPositionAt(mouse)
+                    .ifPresent(position -> pressIfPossible(position));
             repaint();
         }
     };
@@ -106,20 +114,12 @@ public class GameBoardGui extends JPanel implements ActionListener {
     protected void paintGameBoard(Graphics g, Size gameObjectSize) {
 
         gameBoard.getPositions().forEach(position -> {
-            GUIState state;
+            GUIState state = GUIState.NORMAL;
             if (highlightedObject.equals(position)) {
                 state = GUIState.MOUSE_OVER;
-            } else {
-                state = GUIState.NORMAL;
             }
 
-            try {
-                ((GameObjectGui) gameBoard
-                        .getGameObject(position)).draw(g,
-                        gameObjectSize, state);
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
-            }
+            ((GameObjectGui) gameBoard.getGameObject(position)).draw(g, gameObjectSize, state);
         });
     }
 
@@ -129,6 +129,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
             return Size.create((gameBoardGuiSize.getWidth() / xSize),
                     (gameBoardGuiSize.getHeight() / ySize));
         } catch (ArithmeticException e) {
+            logger.warning(e.getMessage());
             return Size.create(0, 0);
         }
     }
@@ -136,29 +137,29 @@ public class GameBoardGui extends JPanel implements ActionListener {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        paintGameBoard(g, calculateGameObjectSize(convert(this.getSize()),
+        paintGameBoard(g, calculateGameObjectSize(convert(getSize()),
                 gameBoard.getXSize(), gameBoard.getYSize()));
     }
 
-    private void moveRightIfPossible() {
+    private synchronized void moveRightIfPossible() {
         if (highlightedObject.getXPos() < (gameBoard.getXSize() - 1)) {
             highlightedObject.moveRight();
         }
     }
 
-    private void moveLeftIfPossible() {
+    private synchronized void moveLeftIfPossible() {
         if (highlightedObject.getXPos() > 0) {
             highlightedObject.moveLeft();
         }
     }
 
-    private void moveUpIfPossible() {
+    private synchronized void moveUpIfPossible() {
         if (highlightedObject.getYPos() > 0) {
             highlightedObject.moveUp();
         }
     }
 
-    private void moveDownIfPossible() {
+    private synchronized void moveDownIfPossible() {
         if (highlightedObject.getYPos() < (gameBoard.getYSize() - 1)) {
             highlightedObject.moveDown();
         }
@@ -168,25 +169,24 @@ public class GameBoardGui extends JPanel implements ActionListener {
         pair(gameBoard.getGameObject(gameObjectPosition));
     }
 
-    private synchronized Position getGameObjectGuiPositionAtPosition(
-            Position position) {
+    private synchronized Optional<Position> getGameObjectGuiPositionAt(
+            Position mousePosition) {
         return gameBoard.getPositions()
                 .stream()
                 .filter(tmpPosition -> ((GameObjectGui) gameBoard
                         .getGameObject(tmpPosition))
-                        .isPositionInsideOfGameObject(position))
-                .findFirst()
-                .orElse(Position.create(-1, -1));
+                        .isPositionInsideOfGameObject(mousePosition))
+                .findFirst();
     }
 
     public synchronized void actionPerformed(ActionEvent obj) {
         this.requestFocusInWindow();
 
-        if (obj.getSource() == st) {
+        if (obj.getSource() == timer) {
             logger.fine("Timer");
             gameBoard.clearPressedObjects();
             this.enableObjects();
-            st.stop();
+            timer.stop();
             this.isPressed = false;
             this.doAfterTimerEvent();
         }
@@ -206,8 +206,8 @@ public class GameBoardGui extends JPanel implements ActionListener {
             if (gameBoard.noPressedObjectIsCorrect() && (gameBoard.isAMatch() || !gameBoard.isAMatch())) {
                 this.isPressed = true;
                 this.disableObjects();
-                st.setInitialDelay(1000);
-                st.start();
+                timer.setInitialDelay(1000);
+                timer.start();
             }
         }
     }
@@ -262,7 +262,7 @@ public class GameBoardGui extends JPanel implements ActionListener {
     }
 
     public void stopGame() {
-        st.stop();
+        timer.stop();
         gameBoard.stopGame();
         logger.fine("stopGame");
     }
