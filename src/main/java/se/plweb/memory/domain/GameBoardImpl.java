@@ -85,7 +85,7 @@ public class GameBoardImpl implements GameBoard {
         }
     }
 
-    public synchronized boolean noPressedObjectIsCorrect() { //TODO fix naming
+    public synchronized boolean noOfPressedObjectIsCorrect() {
         return (pressedObjects.size() == pressedObjectsLength) && pressedObjects.stream()
                 .allMatch(Objects::nonNull);
     }

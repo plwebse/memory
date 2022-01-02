@@ -36,7 +36,7 @@ public class GameBoardImplTest extends TestCase {
             return (gameBoard.getGameObject(position).getState() == GameObjectState.PRESSED_STATE);
         }).count();
 
-        assertTrue(gameBoard.noPressedObjectIsCorrect());
+        assertTrue(gameBoard.noOfPressedObjectIsCorrect());
         assertEquals(2L, actual);
 
         gameBoard.stopGame();
@@ -48,7 +48,7 @@ public class GameBoardImplTest extends TestCase {
 
         gameBoard.pressObject(gameBoard.getGameObject(Position.create(0, 0)));
         gameBoard.pressObject(gameBoard.getGameObject(Position.create(0, 1)));
-        boolean actual = gameBoard.noPressedObjectIsCorrect();
+        boolean actual = gameBoard.noOfPressedObjectIsCorrect();
 
         gameBoard.stopGame();
 

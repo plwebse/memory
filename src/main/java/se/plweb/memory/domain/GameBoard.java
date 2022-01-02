@@ -23,7 +23,7 @@ public interface GameBoard {
 
 	void pressObject(GameObject obj);
 
-	boolean noPressedObjectIsCorrect();
+	boolean noOfPressedObjectIsCorrect();
 
 	boolean isAMatch();
 

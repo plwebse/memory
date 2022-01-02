@@ -74,7 +74,7 @@ public class ComputerPlayerImpl implements ComputerPlayer {
     private void checkIfThePressObjectsIsAMatchOrNotAndClearsThePressedObjects(
             GameBoard gameBoard, GameObject firstObjectToPress,
             GameObject secondObjectToPress) {
-        if (gameBoard.noPressedObjectIsCorrect()) {
+        if (gameBoard.noOfPressedObjectIsCorrect()) {
             if (gameBoard.isAMatch()) {
                 visitedGameObjects.remove(firstObjectToPress);
                 visitedGameObjects.remove(secondObjectToPress);

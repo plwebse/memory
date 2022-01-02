@@ -71,15 +71,10 @@ public class GameBoardGui extends JPanel implements ActionListener {
     private final MouseInputListener mouseInputListener = new MouseInputAdapter() {
 
         public void mouseMoved(MouseEvent e) {
-
             Position mouse = convert(e.getPoint());
-
             getGameObjectGuiPositionAt(mouse)
-                    .ifPresent(position -> {
-                        highlightedObject.moveTo(position);
-                        repaint();
-                    });
-
+                    .ifPresent(highlightedObject::moveTo);
+            repaint();
         }
 
         public void mouseEntered(MouseEvent e) {
@@ -203,8 +198,8 @@ public class GameBoardGui extends JPanel implements ActionListener {
     public synchronized void pair(GameObject gameObject) {
         if (!isPressed) {
             gameBoard.pressObject(gameObject);
-            gameBoard.isAMatch();
-            if (gameBoard.noPressedObjectIsCorrect()) {
+            if (gameBoard.noOfPressedObjectIsCorrect()) {
+                gameBoard.isAMatch();
                 this.isPressed = true;
                 this.disableObjects();
                 timer.setInitialDelay(1000);
