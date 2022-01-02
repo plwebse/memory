@@ -53,82 +53,82 @@ public class ThreadNetworkClient extends AbstractThread {
     }
 
     public void run() {
-        while (isApplicationRunning()) {
-            if (isRunning()) {
-                try {
-                    InputStreamReader isr = new InputStreamReader(socket.getInputStream());
-                    BufferedReader br = new BufferedReader(isr);
-                    PrintWriter pw = new PrintWriter(socket.getOutputStream());
-                    Scanner sc = new Scanner(br);
+        while (isApplicationRunning() && isRunning()) {
 
-                    if (sc.next().equals(ProtocolConstants.SIZE_OF_BOARD)) {
-                        gamePlayerVsNetworkPlayer.makeGameBoard(sc.nextInt(), sc.nextInt());
-                        pw.println(ProtocolConstants.START);
-                        pw.flush();
-                    }
+            try {
+                InputStreamReader isr = new InputStreamReader(socket.getInputStream());
+                BufferedReader br = new BufferedReader(isr);
+                PrintWriter pw = new PrintWriter(socket.getOutputStream());
+                Scanner sc = new Scanner(br);
 
-                    gamePlayerVsNetworkPlayer.startGame();
-
-                    while (true) {
-
-                        if (gamePlayerVsNetworkPlayer.getMatchedPairs() == gamePlayerVsNetworkPlayer
-                                .getTotalNumberOfParis()) {
-                            pw.println(ProtocolConstants.WON);
-                            pw.flush();
-                            gamePlayerVsNetworkPlayer.clientWon();
-                            break;
-                        } else {
-                            gamePlayerVsNetworkPlayer.updateStatusClient(
-                            		gamePlayerVsNetworkPlayer.getMatchedPairs(),
-									gamePlayerVsNetworkPlayer.getTotalNumberOfAttempts()
-							);
-
-                            if (sc.hasNext()) {
-                                String tmp = sc.next();
-                                if (tmp.equals(ProtocolConstants.MATCHED_PAIRS_AND_ATTEMPTS)) {
-                                    gamePlayerVsNetworkPlayer
-                                            .updateStatusServer(sc.nextInt(),
-                                                    sc.nextInt());
-                                } else if (tmp.equals(ProtocolConstants.WON)) {
-                                    gamePlayerVsNetworkPlayer.serverWon();
-                                    break;
-                                }
-                            }
-
-                            pw.println(ProtocolConstants.MATCHED_PAIRS_AND_ATTEMPTS
-                                    + ProtocolConstants.SPACE
-                                    + gamePlayerVsNetworkPlayer
-                                    .getMatchedPairs()
-                                    + ProtocolConstants.SPACE
-                                    + gamePlayerVsNetworkPlayer
-                                    .getTotalNumberOfAttempts());
-                            pw.flush();
-
-                            if (sc.hasNext()) {
-                                if (sc.next().equals(ProtocolConstants.TIME_OUT)) {
-                                    long tmpTimeStamp = sc.nextLong();
-                                    if (tmpTimeStamp > timeStamp) {
-                                        timeStamp = tmpTimeStamp;
-                                    } else {
-                                        gamePlayerVsNetworkPlayer.disConnected();
-                                    }
-                                }
-                            } else {
-                                gamePlayerVsNetworkPlayer.disConnected();
-                            }
-
-                            pw.println(ProtocolConstants.TIME_OUT
-                                    + ProtocolConstants.SPACE
-                                    + Calendar.getInstance().getTimeInMillis());
-                            pw.flush();
-                        }
-                    }
-                } catch (Exception e) {
-                    logger.log(Level.FINE, e.getMessage());
-                    break;
+                if (sc.next().equals(ProtocolConstants.SIZE_OF_BOARD)) {
+                    gamePlayerVsNetworkPlayer.makeGameBoard(sc.nextInt(), sc.nextInt());
+                    pw.println(ProtocolConstants.START);
+                    pw.flush();
                 }
 
+                gamePlayerVsNetworkPlayer.startGame();
+
+                while (true) {
+
+                    if (gamePlayerVsNetworkPlayer.getMatchedPairs() == gamePlayerVsNetworkPlayer
+                            .getTotalNumberOfParis()) {
+                        pw.println(ProtocolConstants.WON);
+                        pw.flush();
+                        gamePlayerVsNetworkPlayer.clientWon();
+                        break;
+                    } else {
+                        gamePlayerVsNetworkPlayer.updateStatusClient(
+                                gamePlayerVsNetworkPlayer.getMatchedPairs(),
+                                gamePlayerVsNetworkPlayer.getTotalNumberOfAttempts()
+                        );
+
+                        if (sc.hasNext()) {
+                            String tmp = sc.next();
+                            if (tmp.equals(ProtocolConstants.MATCHED_PAIRS_AND_ATTEMPTS)) {
+                                gamePlayerVsNetworkPlayer
+                                        .updateStatusServer(sc.nextInt(),
+                                                sc.nextInt());
+                            } else if (tmp.equals(ProtocolConstants.WON)) {
+                                gamePlayerVsNetworkPlayer.serverWon();
+                                break;
+                            }
+                        }
+
+                        pw.println(ProtocolConstants.MATCHED_PAIRS_AND_ATTEMPTS
+                                + ProtocolConstants.SPACE
+                                + gamePlayerVsNetworkPlayer
+                                .getMatchedPairs()
+                                + ProtocolConstants.SPACE
+                                + gamePlayerVsNetworkPlayer
+                                .getTotalNumberOfAttempts());
+                        pw.flush();
+
+                        if (sc.hasNext()) {
+                            if (sc.next().equals(ProtocolConstants.TIME_OUT)) {
+                                long tmpTimeStamp = sc.nextLong();
+                                if (tmpTimeStamp > timeStamp) {
+                                    timeStamp = tmpTimeStamp;
+                                } else {
+                                    gamePlayerVsNetworkPlayer.disConnected();
+                                }
+                            }
+                        } else {
+                            gamePlayerVsNetworkPlayer.disConnected();
+                        }
+
+                        pw.println(ProtocolConstants.TIME_OUT
+                                + ProtocolConstants.SPACE
+                                + Calendar.getInstance().getTimeInMillis());
+                        pw.flush();
+                    }
+                }
+            } catch (Exception e) {
+                logger.log(Level.FINE, e.getMessage());
+                break;
             }
+
+
         }
     }
 }

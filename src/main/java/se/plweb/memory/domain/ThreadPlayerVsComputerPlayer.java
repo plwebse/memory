@@ -29,36 +29,35 @@ public class ThreadPlayerVsComputerPlayer extends AbstractThread {
     }
 
     public void run() {
-        while (isApplicationRunning()) {
-            if (isRunning()) {
-                try {
-                    while (true) {
-                        if (gamePlayerVsComputerPlayer
-                                .getHumanPlayersMatchedPairs() == gamePlayerVsComputerPlayer
-                                .getTotalNumberOfParis()) {
-                            gamePlayerVsComputerPlayer.humanPlayerWon();
-                            break;
-                        } else if (gamePlayerVsComputerPlayer
-                                .getComputerPlayersMatchedPairs() == gamePlayerVsComputerPlayer
-                                .getTotalNumberOfParis()) {
-                            gamePlayerVsComputerPlayer.computerPlayerWon();
-                        } else {
-                            gamePlayerVsComputerPlayer.updateHumanPlayerStatus(
-                                    gamePlayerVsComputerPlayer
-                                            .getHumanPlayersMatchedPairs(),
-                                    gamePlayerVsComputerPlayer
-                                            .getHumanPlayersNumberOfAttempts());
-                            gamePlayerVsComputerPlayer
-                                    .updateComputerPlayerStatus(
-                                            gamePlayerVsComputerPlayer
-                                                    .getComputerPlayersMatchedPairs(),
-                                            gamePlayerVsComputerPlayer
-                                                    .getComputerPlayersNumberOfAttempts());
-                        }
+        while (isApplicationRunning() && isRunning()) {
+
+            try {
+                while (true) {
+                    if (gamePlayerVsComputerPlayer
+                            .getHumanPlayersMatchedPairs() == gamePlayerVsComputerPlayer
+                            .getTotalNumberOfParis()) {
+                        gamePlayerVsComputerPlayer.humanPlayerWon();
+                        break;
+                    } else if (gamePlayerVsComputerPlayer
+                            .getComputerPlayersMatchedPairs() == gamePlayerVsComputerPlayer
+                            .getTotalNumberOfParis()) {
+                        gamePlayerVsComputerPlayer.computerPlayerWon();
+                    } else {
+                        gamePlayerVsComputerPlayer.updateHumanPlayerStatus(
+                                gamePlayerVsComputerPlayer
+                                        .getHumanPlayersMatchedPairs(),
+                                gamePlayerVsComputerPlayer
+                                        .getHumanPlayersNumberOfAttempts());
+                        gamePlayerVsComputerPlayer
+                                .updateComputerPlayerStatus(
+                                        gamePlayerVsComputerPlayer
+                                                .getComputerPlayersMatchedPairs(),
+                                        gamePlayerVsComputerPlayer
+                                                .getComputerPlayersNumberOfAttempts());
                     }
-                } catch (Exception e) {
-                    break;
                 }
+            } catch (Exception e) {
+                break;
             }
         }
     }

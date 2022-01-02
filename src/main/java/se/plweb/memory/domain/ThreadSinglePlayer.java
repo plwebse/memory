@@ -28,24 +28,22 @@ public class ThreadSinglePlayer extends AbstractThread {
     }
 
     public void run() {
-        while (isApplicationRunning()) {
-            if (isRunning()) {
-                try {
-                    gameSinglePlayer.startGame();
-                    while (true) {
-                        if (gameSinglePlayer.getMatchedPairs() == gameSinglePlayer
-                                .getTotalNumberOfParis()) {
-                            gameSinglePlayer.singlePlayerWon();
-                            break;
-                        } else {
-                            gameSinglePlayer.updateStatusSinglePlayerStatus(
-                                    gameSinglePlayer.getMatchedPairs(),
-                                    gameSinglePlayer.getNumberOfAttempts());
-                        }
+        while (isApplicationRunning() && isRunning()) {
+            try {
+                gameSinglePlayer.startGame();
+                while (true) {
+                    if (gameSinglePlayer.getMatchedPairs() == gameSinglePlayer
+                            .getTotalNumberOfParis()) {
+                        gameSinglePlayer.singlePlayerWon();
+                        break;
+                    } else {
+                        gameSinglePlayer.updateStatusSinglePlayerStatus(
+                                gameSinglePlayer.getMatchedPairs(),
+                                gameSinglePlayer.getNumberOfAttempts());
                     }
-                } catch (Exception e) {
-                    break;
                 }
+            } catch (Exception e) {
+                break;
             }
         }
     }

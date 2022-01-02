@@ -54,25 +54,22 @@ public class ThreadWaitForNetworkClient extends AbstractThread {
     }
 
     public void run() {
-        while (isApplicationRunning()) {
-            if (isRunning()) {
-
-                ThreadControl threadControl = ThreadControl.getInstance();
-                logger.log(Level.FINE, "run() ");
-                try {
-                    serverSocket = new ServerSocket(port);
-                    gameMultiPlayer.waitingForClient();
-                    logger.log(Level.FINE, "run waiting for client");
-                    threadControl.startServer(serverSocket.accept(),
-                            gameMultiPlayer, xSize, ySize);
-                    closeServerSocket(serverSocket);
-                    threadControl.stopWaitForClient();
-                    logger.log(Level.FINE, "run complete");
-                } catch (Exception e) {
-                    logger.log(Level.WARNING, e.getMessage());
-                } finally {
-                    closeServerSocket(serverSocket);
-                }
+        while (isApplicationRunning() && isRunning()) {
+            ThreadControl threadControl = ThreadControl.getInstance();
+            logger.log(Level.FINE, "run() ");
+            try {
+                serverSocket = new ServerSocket(port);
+                gameMultiPlayer.waitingForClient();
+                logger.log(Level.FINE, "run waiting for client");
+                threadControl.startServer(serverSocket.accept(),
+                        gameMultiPlayer, xSize, ySize);
+                closeServerSocket(serverSocket);
+                threadControl.stopWaitForClient();
+                logger.log(Level.FINE, "run complete");
+            } catch (Exception e) {
+                logger.log(Level.WARNING, e.getMessage());
+            } finally {
+                closeServerSocket(serverSocket);
             }
         }
     }
