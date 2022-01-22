@@ -17,16 +17,25 @@ public class GameObjectGuiImpl implements GameObjectGui {
     private static final Color BACKGROUND_COLOR = Color.WHITE;
     private static final Color MATCHED_BACKGROUND_COLOR = Color.LIGHT_GRAY;
     private static final Color MOUSEOVER = Color.BLACK;
-    private static final int borderWidth = 5;
-    private static final int borderWidthX2 = 10;
+    private static final int BORDER_WIDTH = 5;
+    private static final int BORDER_WIDTH_X_2 = 10;
     private final GameObject gameObject;
     private final GuiHelper guiHelper;
     private int width, height, xTopLeft, yTopLeft;
     private static final Logger logger = Logger.getLogger(GameObjectGuiImpl.class.getName());
 
     public GameObjectGuiImpl(int value, Position position, GuiHelper guiHelper) {
-        gameObject = GameObjectImpl.create(value, position);
+        this.gameObject = GameObjectImpl.create(value, position);
         this.guiHelper = guiHelper;
+    }
+
+    protected GameObjectGuiImpl(int value, Position position, GuiHelper guiHelper, int width, int height, int xTopLeft, int yTopLeft) {
+        this.gameObject = GameObjectImpl.create(value, position);
+        this.guiHelper = guiHelper;
+        this.width = width;
+        this.height = height;
+        this.xTopLeft = xTopLeft;
+        this.yTopLeft = yTopLeft;
     }
 
     public int getValue() {
@@ -49,16 +58,12 @@ public class GameObjectGuiImpl implements GameObjectGui {
         gameObject.setState(value);
     }
 
-    @Override
-    public String toString() {
-        return gameObject.toString();
-    }
 
     private void paintBackground(Graphics graphics, Color backgroundColor, Color borderColor) {
         graphics.setColor(backgroundColor);
-        graphics.fillRect(xTopLeft, yTopLeft, width, height);
+        graphics.fillRect(getXTopLeft(), getYTopLeft(), getWidth(), getHeight());
         graphics.setColor(borderColor);
-        graphics.drawRect(xTopLeft, yTopLeft, width - 1, height - 1);
+        graphics.drawRect(getXTopLeft(), getYTopLeft(), getWidth() - 1, getHeight() - 1);
     }
 
     private void paintValue(Graphics graphics, int value) {
@@ -74,9 +79,9 @@ public class GameObjectGuiImpl implements GameObjectGui {
         int startX = calculateTopX();
         int startY = calculateTopY();
 
-        int xOffset = startX + getStringStartOffset(width, cValueLength);
-        int yOffset = startY + 20 + (height / 4);
-        float fontSize = (height / 2.2f) / 10;
+        int xOffset = startX + getStringStartOffset(getWidth(), cValueLength);
+        int yOffset = startY + 20 + (getHeight() / 4);
+        float fontSize = (getHeight() / 2.2f) / 10;
 
         paintString(graphics, cValue, cValueLength, xOffset, yOffset, fontSize);
     }
@@ -93,14 +98,14 @@ public class GameObjectGuiImpl implements GameObjectGui {
     }
 
     private int calculateTopX() {
-        int topLeftX = xTopLeft + borderWidth;
+        int topLeftX = getXTopLeft() + BORDER_WIDTH;
         topLeftX += calculateCenterXPos();
         topLeftX = topLeftX - calculateHalfOfTotalValueWidth();
         return topLeftX;
     }
 
     private int calculateTopY() {
-        int topLeftY = yTopLeft + borderWidth;
+        int topLeftY = getYTopLeft() + BORDER_WIDTH;
         topLeftY += calculateCenterYPos();
         topLeftY = topLeftY - calculateHalfOfTotalValueHeight();
         return topLeftY;
@@ -119,19 +124,19 @@ public class GameObjectGuiImpl implements GameObjectGui {
     }
 
     private int calculateCenterXPos() {
-        return divideBy2(width - borderWidthX2);
+        return divideBy2(getWidth() - BORDER_WIDTH_X_2);
     }
 
     private int calculateCenterYPos() {
-        return divideBy2(height - borderWidthX2);
+        return divideBy2(getHeight() - BORDER_WIDTH_X_2);
     }
 
     private int calculateValueObjectWidth() {
-        return divideBy6(width - borderWidthX2);
+        return divideBy6(getWidth() - BORDER_WIDTH_X_2);
     }
 
     private int calculateValueObjectHeight() {
-        return divideBy6(height - borderWidthX2);
+        return divideBy6(getHeight() - BORDER_WIDTH_X_2);
     }
 
     private int calculateValueObjectSpace(int valueObjectWidthOrHeight) {
@@ -162,11 +167,11 @@ public class GameObjectGuiImpl implements GameObjectGui {
             return;
         }
 
-        this.width = size.getWidth();
-        this.height = size.getHeight();
+        width = size.getWidth();
+        height = size.getHeight();
 
-        xTopLeft = this.width * gameObject.getPosition().getXPos();
-        yTopLeft = this.height * gameObject.getPosition().getYPos();
+        xTopLeft = width * gameObject.getPosition().getXPos();
+        yTopLeft = height * gameObject.getPosition().getYPos();
 
         switch (gameObject.getState()) {
             case NORMAL_STATE:
@@ -192,11 +197,10 @@ public class GameObjectGuiImpl implements GameObjectGui {
     }
 
     public boolean isPositionInsideOfGameObject(Position position) {
-        return position.getXPos() > xTopLeft
-                && position.getXPos() <= (xTopLeft + width)
-                && position.getYPos() > yTopLeft
-                && position.getYPos() <= (yTopLeft + height);
-
+        return position.getXPos() > getXTopLeft()
+                && position.getXPos() <= (getXTopLeft() + getWidth())
+                && position.getYPos() > getYTopLeft()
+                && position.getYPos() <= (getYTopLeft() + getHeight());
     }
 
     private int divideBy2(int number) {
@@ -209,4 +213,24 @@ public class GameObjectGuiImpl implements GameObjectGui {
 
     public enum GUIState {NORMAL, MOUSE_OVER}
 
+    @Override
+    public String toString() {
+        return gameObject.toString();
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getXTopLeft() {
+        return xTopLeft;
+    }
+
+    public int getYTopLeft() {
+        return yTopLeft;
+    }
 }
