@@ -56,9 +56,8 @@ public class ThreadNetworkClient extends AbstractThread {
         while (isApplicationRunning() && isRunning()) {
 
             try {
-                InputStreamReader isr = new InputStreamReader(socket.getInputStream());
-                BufferedReader br = new BufferedReader(isr);
                 PrintWriter pw = new PrintWriter(socket.getOutputStream());
+                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 Scanner sc = new Scanner(br);
 
                 if (sc.next().equals(ProtocolConstants.SIZE_OF_BOARD)) {
@@ -69,7 +68,7 @@ public class ThreadNetworkClient extends AbstractThread {
 
                 gamePlayerVsNetworkPlayer.startGame();
 
-                while (true) {
+                while (isRunning()) {
 
                     if (gamePlayerVsNetworkPlayer.getMatchedPairs() == gamePlayerVsNetworkPlayer
                             .getTotalNumberOfParis()) {
@@ -127,8 +126,6 @@ public class ThreadNetworkClient extends AbstractThread {
                 logger.log(Level.FINE, e.getMessage());
                 break;
             }
-
-
         }
     }
 }

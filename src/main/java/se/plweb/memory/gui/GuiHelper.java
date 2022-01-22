@@ -13,9 +13,13 @@ public class GuiHelper {
         colorValues = new ColorValue[totalNumberOfPairs];
 
         for (int value = 1; value <= totalNumberOfPairs; value++) {
-            int color = getColorIndex(value);
-            displayValues[color]++;
-            colorValues[getArrayIndex(value)] = new ColorValue(color, displayValues[color]);
+            int colorIndex = getColorIndex(value);
+            displayValues[colorIndex]++;
+
+            colorValues[getArrayIndex(value)] = new ColorValue(
+                    displayValues[colorIndex],
+                    ValueColor.getValueColor(colorIndex)
+            );
         }
     }
 
@@ -36,21 +40,7 @@ public class GuiHelper {
     }
 
     public Color getValueColor(int value) {
-        ColorValue colorValue = getColorValueFor(value);
-        if (colorValue != null) {
-            switch (colorValue.getColor()) {
-                case 0:
-                    return ValueColor.BLACK.getColor();
-                case 1:
-                    return ValueColor.RED.getColor();
-                case 2:
-                    return ValueColor.GREEN.getColor();
-                case 3:
-                    return ValueColor.BLUE.getColor();
-            }
-        }
-
-        return null;
+        return getColorValueFor(value).getValueColor().getColor();
     }
 
     public int getDisplayValue(int value) {
@@ -66,43 +56,55 @@ public class GuiHelper {
     }
 
     private enum ValueColor {
-        BLACK(Color.BLACK),
-        RED(new Color(175, 0, 0)),
-        GREEN(new Color(0, 175, 0)),
-        BLUE(new Color(0, 0, 175));
+        BLACK(Color.BLACK, 0),
+        RED(new Color(175, 0, 0), 1),
+        GREEN(new Color(0, 175, 0), 2),
+        BLUE(new Color(0, 0, 175), 3);
 
         private final Color color;
+        private final int index;
 
-        ValueColor(Color color) {
+        ValueColor(Color color, int index) {
             this.color = color;
+            this.index = index;
         }
 
         public Color getColor() {
             return color;
         }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public static ValueColor getValueColor(int byIndex) {
+            return Arrays.stream(ValueColor.values())
+                    .filter(valueColor -> valueColor.getIndex() == byIndex).findFirst()
+                    .orElse(null);
+        }
     }
 
     static class ColorValue {
 
-        private final int color;
         private final int displayValue;
+        private final ValueColor valueColor;
 
-        public ColorValue(int color, int displayValue) {
-            this.color = color;
+        public ColorValue(int displayValue, ValueColor valueColor) {
             this.displayValue = displayValue;
-        }
-
-        public int getColor() {
-            return color;
+            this.valueColor = valueColor;
         }
 
         public int getDisplayValue() {
             return displayValue;
         }
 
+        public ValueColor getValueColor() {
+            return valueColor;
+        }
+
         @Override
         public String toString() {
-            return "color:" + color + ", displayValue:" + displayValue;
+            return "displayValue:" + displayValue;
         }
     }
 

@@ -31,7 +31,7 @@ public class ThreadSinglePlayer extends AbstractThread {
         while (isApplicationRunning() && isRunning()) {
             try {
                 gameSinglePlayer.startGame();
-                while (true) {
+                while (isRunning()) {
                     if (gameSinglePlayer.getMatchedPairs() == gameSinglePlayer
                             .getTotalNumberOfParis()) {
                         gameSinglePlayer.singlePlayerWon();

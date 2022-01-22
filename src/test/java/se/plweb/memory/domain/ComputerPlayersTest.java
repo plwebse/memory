@@ -24,22 +24,14 @@ public class ComputerPlayersTest extends TestCase {
 
     public void testThisSetUp() {
 
-        boolean actual = false;
-
-        if (gameBoard.getTotalNumberOfPairs() > 0) {
-            actual = true;
-        }
+        boolean actual = gameBoard.getTotalNumberOfPairs() > 0;
 
         assertTrue(actual);
     }
 
     public void testThisSetUp2() {
 
-        boolean actual = false;
-
-        if (gameBoard.getNumberOfMatchedPairs() == 0) {
-            actual = true;
-        }
+        boolean actual = gameBoard.getNumberOfMatchedPairs() == 0;
 
         assertTrue(actual);
     }

@@ -32,7 +32,7 @@ public class ThreadPlayerVsComputerPlayer extends AbstractThread {
         while (isApplicationRunning() && isRunning()) {
 
             try {
-                while (true) {
+                while (isRunning()) {
                     if (gamePlayerVsComputerPlayer
                             .getHumanPlayersMatchedPairs() == gamePlayerVsComputerPlayer
                             .getTotalNumberOfParis()) {

@@ -59,8 +59,8 @@ public class ThreadNetworkServer extends AbstractThread {
             }
 
             try {
-                InputStreamReader isr = new InputStreamReader(socket.getInputStream());
-                BufferedReader br = new BufferedReader(isr);
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter pw = new PrintWriter(socket.getOutputStream());
                 Scanner sc = new Scanner(br);
 
