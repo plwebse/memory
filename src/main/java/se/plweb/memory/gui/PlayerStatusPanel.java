@@ -36,12 +36,12 @@ public class PlayerStatusPanel extends JPanel {
 	}
 
 	public void updatePairStatus(int matchedPairs, int totalNumberOfPairs) {
-		playerPairStatus.setText(matchedPairs + " / " + totalNumberOfPairs);
+		playerPairStatus.setText(String.format("%d / %d", matchedPairs, totalNumberOfPairs));
 		updatePanel();
 	}
 
 	public void updateAttempts(int totalNumberOfAttempts) {
-		playerAttempts.setText(totalNumberOfAttempts + "");
+		playerAttempts.setText(String.format("%d", totalNumberOfAttempts));
 		updatePanel();
 	}
 

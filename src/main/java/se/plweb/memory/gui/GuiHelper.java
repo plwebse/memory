@@ -3,6 +3,7 @@ package se.plweb.memory.gui;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 public class GuiHelper {
 
@@ -11,16 +12,17 @@ public class GuiHelper {
 
     private GuiHelper(int totalNumberOfPairs) {
         colorValues = new ColorValue[totalNumberOfPairs];
+        IntStream.rangeClosed(1, totalNumberOfPairs)
+                .forEach(this::populateColorValue);
+    }
 
-        for (int value = 1; value <= totalNumberOfPairs; value++) {
-            int colorIndex = getColorIndex(value);
-            displayValues[colorIndex]++;
-
-            colorValues[getArrayIndex(value)] = new ColorValue(
-                    displayValues[colorIndex],
-                    ValueColor.getValueColor(colorIndex)
-            );
-        }
+    private void populateColorValue(int value) {
+        int colorIndex = getColorIndex(value);
+        displayValues[colorIndex]++;
+        colorValues[getArrayIndex(value)] = new ColorValue(
+                displayValues[colorIndex],
+                ValueColor.getValueColor(colorIndex)
+        );
     }
 
     public static GuiHelper create(int totalNumberOfPairs) {
@@ -54,6 +56,7 @@ public class GuiHelper {
         return "GuiHelper [colorValues=" + Arrays.toString(colorValues) + ", displayValues="
                 + Arrays.toString(displayValues) + "]";
     }
+
 
     private enum ValueColor {
         BLACK(Color.BLACK, 0),

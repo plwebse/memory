@@ -1,4 +1,6 @@
-package se.plweb.memory.domain;
+package se.plweb.memory.converter;
+
+import se.plweb.memory.domain.Size;
 
 import java.awt.*;
 

@@ -11,8 +11,8 @@ import java.awt.event.*;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import static se.plweb.memory.domain.DimensionToSizeConverter.convert;
-import static se.plweb.memory.domain.PointToPositionConverter.convert;
+import static se.plweb.memory.converter.DimensionToSizeConverter.convert;
+import static se.plweb.memory.converter.PointToPositionConverter.convert;
 
 /**
  * @author Peter Lindblom
@@ -217,13 +217,13 @@ public class GameBoardGui extends JPanel implements ActionListener {
     }
 
     public void makeGameBoard(int xSize, int ySize) {
-        int value = 1;
-        int i = 1;
-        int valueDirectionCount = 0;
         gameBoard.newEmptyGameBoard(xSize, ySize);
         GuiHelper guiHelper = GuiHelper.create(gameBoard.getTotalNumberOfPairs());
         // GUI settings
         this.setLayout(new GridLayout(xSize, ySize));
+
+        int value = 1;
+        int i = 1;
 
         for (Position position : gameBoard.getPositions()) {
             GameObjectGui gameObjectGui = new GameObjectGuiImpl(value, position, guiHelper);
@@ -232,13 +232,8 @@ public class GameBoardGui extends JPanel implements ActionListener {
 
             if (i % 2 == 0) {
                 value++;
-                valueDirectionCount++;
             }
             i++;
-
-            if (valueDirectionCount == 4) {
-                valueDirectionCount = 0;
-            }
         }
     }
 
