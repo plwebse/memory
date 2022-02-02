@@ -1,6 +1,7 @@
 package se.plweb.memory.domain;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Peter Lindblom
@@ -42,5 +43,7 @@ public interface GameBoard {
 	void newEmptyGameBoard(int xSize, int ySize);
 
 	List<Position> getPositions();
+
+	Map<Position, Integer> createValuesForPositions();
 
 }

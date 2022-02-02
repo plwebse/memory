@@ -248,17 +248,10 @@ public class GameBoardImpl implements GameBoard {
 
     private List<GameObject> createGameObjects() {
         List<GameObject> gameObjectList = new ArrayList<>();
-        int value = 1;
-        int i = 1;
 
-        for (Position position : getPositions()) {
-            gameObjectList.add(GameObjectImpl.create(value, position,
-                    GameObjectState.PRESSED_STATE));
-            if (i % 2 == 0) {
-                value++;
-            }
-            i++;
-        }
+        createValuesForPositions().forEach((position, value) -> gameObjectList.add(
+                GameObjectImpl.create(value, position, GameObjectState.PRESSED_STATE))
+        );
 
         return gameObjectList;
     }
@@ -274,5 +267,21 @@ public class GameBoardImpl implements GameBoard {
 
     public List<Position> getPositions() {
         return positions;
+    }
+
+    @Override
+    public Map<Position, Integer> createValuesForPositions() {
+        Map<Position, Integer> valuePositionMap = new HashMap<>();
+
+        List<Position> positionList = getPositions();
+        for (int i = 1, value = 1, positionListSize = positionList.size(); i <= positionListSize; i++) {
+            Position position = positionList.get(i);
+            valuePositionMap.put(position, value);
+            if (i % 2 == 0) {
+                value++;
+            }
+        }
+
+        return valuePositionMap;
     }
 }

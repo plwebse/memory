@@ -222,19 +222,11 @@ public class GameBoardGui extends JPanel implements ActionListener {
         // GUI settings
         this.setLayout(new GridLayout(xSize, ySize));
 
-        int value = 1;
-        int i = 1;
-
-        for (Position position : gameBoard.getPositions()) {
+        gameBoard.createValuesForPositions().forEach((position, value) -> {
             GameObjectGui gameObjectGui = new GameObjectGuiImpl(value, position, guiHelper);
             gameObjectGui.setState(GameObjectState.PRESSED_STATE);
             gameBoard.setGameObject(gameObjectGui);
-
-            if (i % 2 == 0) {
-                value++;
-            }
-            i++;
-        }
+        });
     }
 
     public void startGame() {
