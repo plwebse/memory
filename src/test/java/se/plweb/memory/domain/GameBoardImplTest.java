@@ -2,6 +2,9 @@ package se.plweb.memory.domain;
 
 import junit.framework.TestCase;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
  * @author Peter Lindblom
  */
@@ -136,5 +139,23 @@ public class GameBoardImplTest extends TestCase {
                 .allMatch(position -> gameBoard.getGameObject(position).getState() == GameObjectState.PRESSED_STATE);
 
         assertTrue(actual);
+    }
+
+    public void testCreateValuesForPositions() {
+
+        Map<Position, Integer> positionValueMap = gameBoard.createValuesForPositions();
+
+        assertEquals(100, positionValueMap.values().size());
+
+        Set<Integer> uniqueValues = new HashSet<>(positionValueMap.values());
+
+        assertEquals(50, uniqueValues.size());
+
+        assertEquals(Optional.of(50), positionValueMap.values().stream().max(Integer::compare));
+        assertEquals(Optional.of(1), positionValueMap.values().stream().min(Integer::compare));
+
+
+
+
     }
 }

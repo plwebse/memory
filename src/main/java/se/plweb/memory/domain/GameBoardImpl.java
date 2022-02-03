@@ -271,15 +271,17 @@ public class GameBoardImpl implements GameBoard {
 
     @Override
     public Map<Position, Integer> createValuesForPositions() {
-        Map<Position, Integer> valuePositionMap = new HashMap<>();
+        Map<Position, Integer> valuePositionMap = new HashMap<>(getPositions().size());
 
-        List<Position> positionList = getPositions();
-        for (int i = 1, value = 1, positionListSize = positionList.size(); i <= positionListSize; i++) {
-            Position position = positionList.get(i);
+        int count = 1;
+        int value = 1;
+
+        for (Position position : getPositions()) {
             valuePositionMap.put(position, value);
-            if (i % 2 == 0) {
+            if (count % 2 == 0) {
                 value++;
             }
+            count++;
         }
 
         return valuePositionMap;
