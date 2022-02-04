@@ -1,36 +1,43 @@
 package se.plweb.memory.domain;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.*;
 
 /**
  * @author Peter Lindblom
  */
-public class GameBoardImplTest extends TestCase {
+public class GameBoardImplTest {
     final GameBoard gameBoard = new GameBoardImpl();
 
-    protected void setUp() {
+    @Before
+    public void setUp() {
         gameBoard.makeGameBoard(10, 10);
     }
 
-    public void testSetGameBoard() {
-        assertNotNull(gameBoard.getGameObject(Position.create(0, 0)));
+    @Test
+    public void setGameBoard() {
+        Assert.assertNotNull(gameBoard.getGameObject(Position.create(0, 0)));
     }
 
-    public void testSetGameObject() {
-        assertNotNull(gameBoard.getGameObject(Position.create(9, 9)));
+    @Test
+    public void setGameObject() {
+        Assert.assertNotNull(gameBoard.getGameObject(Position.create(9, 9)));
     }
 
-    public void testStartGame() {
+    @Test
+    public void startGame() {
         gameBoard.startGame();
         boolean actual = gameBoard.getPositions().stream()
                 .allMatch(position -> (gameBoard.getGameObject(position).getState() == GameObjectState.NORMAL_STATE));
         gameBoard.stopGame();
-        assertTrue(actual);
+        Assert.assertTrue(actual);
     }
 
-    public void testPressObject() {
+    @Test
+    public void pressObject() {
         gameBoard.startGame();
 
         long actual = gameBoard.getPositions().stream().filter(position -> {
@@ -38,13 +45,14 @@ public class GameBoardImplTest extends TestCase {
             return (gameBoard.getGameObject(position).getState() == GameObjectState.PRESSED_STATE);
         }).count();
 
-        assertTrue(gameBoard.noOfPressedObjectIsCorrect());
-        assertEquals(2L, actual);
+        Assert.assertTrue(gameBoard.noOfPressedObjectIsCorrect());
+        Assert.assertEquals(2L, actual);
 
         gameBoard.stopGame();
     }
 
-    public void testIsFull() {
+    @Test
+    public void isFull() {
 
         gameBoard.startGame();
 
@@ -54,10 +62,11 @@ public class GameBoardImplTest extends TestCase {
 
         gameBoard.stopGame();
 
-        assertTrue(actual);
+        Assert.assertTrue(actual);
     }
 
-    public void testIsAMatchAndClearPressedObjects() {
+    @Test
+    public void isAMatchAndClearPressedObjects() {
         boolean actual = false;
 
         gameBoard.startGame();
@@ -77,10 +86,11 @@ public class GameBoardImplTest extends TestCase {
 
         gameBoard.stopGame();
         System.out.println(gameBoard.getTotalNumberOfAttempts());
-        assertTrue(actual);
+        Assert.assertTrue(actual);
     }
 
-    public void testNumberOfAttemptsAndMatchedPairs() {
+    @Test
+    public void numberOfAttemptsAndMatchedPairs() {
         boolean actual = false;
 
         gameBoard.startGame();
@@ -101,10 +111,11 @@ public class GameBoardImplTest extends TestCase {
 
         gameBoard.stopGame();
         System.out.println(gameBoard.getTotalNumberOfAttempts());
-        assertTrue(actual);
+        Assert.assertTrue(actual);
     }
 
-    public void testToSolveGameWithComputerPlayerMove() {
+    @Test
+    public void solveGameWithComputerPlayerMove() {
 
         int counter = 0;
 
@@ -127,31 +138,33 @@ public class GameBoardImplTest extends TestCase {
             gameBoard.stopGame();
             System.out.println(gameBoard.getTotalNumberOfAttempts());
         }
-        assertEquals(ComputerPlayers.values().length, counter);
+        Assert.assertEquals(ComputerPlayers.values().length, counter);
     }
 
-    public void testStopGame() {
+    @Test
+    public void stopGame() {
 
         gameBoard.startGame();
         gameBoard.stopGame();
         boolean actual = gameBoard.getPositions().stream()
                 .allMatch(position -> gameBoard.getGameObject(position).getState() == GameObjectState.PRESSED_STATE);
 
-        assertTrue(actual);
+        Assert.assertTrue(actual);
     }
 
-    public void testCreateValuesForPositions() {
+    @Test
+    public void createValuesForPositions() {
 
         Map<Position, Integer> positionValueMap = gameBoard.createValuesForPositions();
 
-        assertEquals(100, positionValueMap.values().size());
+        Assert.assertEquals(100, positionValueMap.values().size());
 
         Set<Integer> uniqueValues = new HashSet<>(positionValueMap.values());
 
-        assertEquals(50, uniqueValues.size());
+        Assert.assertEquals(50, uniqueValues.size());
 
-        assertEquals(Optional.of(50), positionValueMap.values().stream().max(Integer::compare));
-        assertEquals(Optional.of(1), positionValueMap.values().stream().min(Integer::compare));
+        Assert.assertEquals(Optional.of(50), positionValueMap.values().stream().max(Integer::compare));
+        Assert.assertEquals(Optional.of(1), positionValueMap.values().stream().min(Integer::compare));
 
     }
 }
