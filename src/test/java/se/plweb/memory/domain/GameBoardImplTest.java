@@ -3,7 +3,6 @@ package se.plweb.memory.domain;
 import junit.framework.TestCase;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Peter Lindblom
@@ -153,9 +152,6 @@ public class GameBoardImplTest extends TestCase {
 
         assertEquals(Optional.of(50), positionValueMap.values().stream().max(Integer::compare));
         assertEquals(Optional.of(1), positionValueMap.values().stream().min(Integer::compare));
-
-
-
 
     }
 }
