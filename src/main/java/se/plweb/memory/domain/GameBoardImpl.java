@@ -247,13 +247,11 @@ public class GameBoardImpl implements GameBoard {
     }
 
     private List<GameObject> createGameObjects() {
-        List<GameObject> gameObjectList = new ArrayList<>();
-
-        createValuesForPositions().forEach((position, value) -> gameObjectList.add(
-                GameObjectImpl.create(value, position, GameObjectState.PRESSED_STATE))
-        );
-
-        return gameObjectList;
+        return createValuesForPositions()
+                .entrySet()
+                .stream()
+                .map(entry -> GameObjectImpl.create(entry.getValue(), entry.getKey(), GameObjectState.PRESSED_STATE))
+                .collect(Collectors.toList());
     }
 
     private void setPositions() {

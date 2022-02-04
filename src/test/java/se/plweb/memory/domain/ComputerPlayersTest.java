@@ -1,59 +1,58 @@
 package se.plweb.memory.domain;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Peter Lindblom
  */
-public class ComputerPlayersTest extends TestCase {
+public class ComputerPlayersTest {
 
     GameBoard gameBoard = new GameBoardImpl();
 
-    @Override
-    protected void setUp() {
+    @Before
+    public void setUp() {
         gameBoard = new GameBoardImpl();
         gameBoard.makeGameBoard(10, 10);
         gameBoard.startGame();
     }
 
-    @Override
-    protected void tearDown() {
+    @After
+    public void tearDown() {
         gameBoard.stopGame();
         gameBoard = null;
     }
 
-    public void testThisSetUp() {
+    @Test
+    public void totalNumberOfPairsIsGreaterThanZero() {
 
         boolean actual = gameBoard.getTotalNumberOfPairs() > 0;
 
-        assertTrue(actual);
+        Assert.assertTrue(actual);
     }
 
-    public void testThisSetUp2() {
+    @Test
+    public void getNumberOfMatchedPairsShouldBeZero() {
 
         boolean actual = gameBoard.getNumberOfMatchedPairs() == 0;
 
-        assertTrue(actual);
+        Assert.assertTrue(actual);
     }
 
-    public void testEnumFactory2() {
-
-        boolean actual = false;
-
+    @Test
+    public void nrOfComputerPlayers() {
         ComputerPlayers[] computerPlayers = ComputerPlayers.values();
 
         for (ComputerPlayers computerPlayer : computerPlayers) {
             System.out.println(computerPlayer.getDescription());
         }
 
-        if (computerPlayers.length > 0) {
-            actual = true;
-        }
-
-        assertTrue(actual);
-
+        Assert.assertTrue(computerPlayers.length > 0);
     }
 
+    @Test
     public void testToSolveGameWithComputerPlayerMoveEasy() {
         boolean actual = false;
 
@@ -73,9 +72,10 @@ public class ComputerPlayersTest extends TestCase {
         System.out.println("ComputerPlayerEasy()"
                 + gameBoard.getTotalNumberOfAttempts());
 
-        assertTrue(actual);
+        Assert.assertTrue(actual);
     }
 
+    @Test
     public void testToSolveGameWithComputerPlayerMoveAdvanced() {
         boolean actual = false;
 
@@ -95,7 +95,7 @@ public class ComputerPlayersTest extends TestCase {
         System.out.println("ComputerPlayerAdvanced()"
                 + gameBoard.getTotalNumberOfAttempts());
 
-        assertTrue(actual);
+        Assert.assertTrue(actual);
     }
 
 }

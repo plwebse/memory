@@ -29,6 +29,7 @@ public class GameObjectGuiImpl implements GameObjectGui {
         this.guiHelper = guiHelper;
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected GameObjectGuiImpl(int value, Position position, GuiHelper guiHelper, int width, int height, int xTopLeft, int yTopLeft) {
         this.gameObject = GameObjectImpl.create(value, position);
         this.guiHelper = guiHelper;
