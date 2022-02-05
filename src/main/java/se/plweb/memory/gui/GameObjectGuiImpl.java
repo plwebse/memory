@@ -3,6 +3,9 @@ package se.plweb.memory.gui;
 import se.plweb.memory.domain.*;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
+import java.awt.geom.Rectangle2D;
 import java.util.logging.Logger;
 
 /**
@@ -17,8 +20,6 @@ public class GameObjectGuiImpl implements GameObjectGui {
     private static final Color BACKGROUND_COLOR = Color.WHITE;
     private static final Color MATCHED_BACKGROUND_COLOR = Color.LIGHT_GRAY;
     private static final Color MOUSEOVER = Color.BLACK;
-    private static final int BORDER_WIDTH = 5;
-    private static final int BORDER_WIDTH_X_2 = 10;
     private final GameObject gameObject;
     private final GuiHelper guiHelper;
     private int width, height, xTopLeft, yTopLeft;
@@ -69,79 +70,31 @@ public class GameObjectGuiImpl implements GameObjectGui {
 
     private void paintValue(Graphics graphics, int value) {
         graphics.setColor(guiHelper.getValueColor(value));
-        paintValueShape(graphics, value);
+        paintString(graphics, String.valueOf(value));
     }
 
-    private void paintValueShape(Graphics graphics, int value) {
-
-        char[] cValue = String.valueOf(value).toCharArray();
-        int cValueLength = cValue.length;
-
-        int startX = calculateTopX();
-        int startY = calculateTopY();
-
-        int xOffset = startX + getStringStartOffset(getWidth(), cValueLength);
-        int yOffset = startY + 20 + (getHeight() / 4);
-        float fontSize = (getHeight() / 2.2f) / 10;
-
-        paintString(graphics, cValue, cValueLength, xOffset, yOffset, fontSize);
-    }
-
-    private int getStringStartOffset(int width, int charLength) {
-        return (width / 2) - (width / 4) * (charLength);
-    }
-
-    private void paintString(Graphics graphics, char[] chars, int charsLength, int x, int y, float fontSize) {
+    private void paintString(Graphics graphics, String sValue) {
         Font currentFont = graphics.getFont();
-        graphics.setFont(currentFont.deriveFont(currentFont.getSize() * fontSize).deriveFont(Font.BOLD));
-        graphics.drawChars(chars, 0, charsLength, x, y);
+
+        Graphics2D g2d = (Graphics2D) graphics.create();
+        g2d.setFont(getValueFontWithCorrectSize(currentFont));
+        FontRenderContext context = g2d.getFontRenderContext();
+        TextLayout txt = new TextLayout(sValue, g2d.getFont(), context);
+        Rectangle2D bounds = txt.getBounds();
+
+        int x = (int) (getWidth() - (bounds.getWidth())) / 2;
+        x = x - (int) bounds.getX();
+        int y = (getHeight() - (int) ((bounds.getHeight() - txt.getDescent()))) / 2;
+        y += txt.getAscent() - txt.getDescent();
+
+        g2d.drawString(sValue, xTopLeft + x, yTopLeft + y);
+
         graphics.setFont(currentFont);
     }
 
-    private int calculateTopX() {
-        int topLeftX = getXTopLeft() + BORDER_WIDTH;
-        topLeftX += calculateCenterXPos();
-        topLeftX = topLeftX - calculateHalfOfTotalValueWidth();
-        return topLeftX;
-    }
-
-    private int calculateTopY() {
-        int topLeftY = getYTopLeft() + BORDER_WIDTH;
-        topLeftY += calculateCenterYPos();
-        topLeftY = topLeftY - calculateHalfOfTotalValueHeight();
-        return topLeftY;
-    }
-
-    private int calculateHalfOfTotalValueWidth() {
-        int valueWidth = (calculateValueObjectWidth() * 4);
-        valueWidth = valueWidth + calculateValueObjectSpace(calculateValueObjectWidth() * 3);
-        return divideBy2(valueWidth);
-    }
-
-    private int calculateHalfOfTotalValueHeight() {
-        int valueHeight = (calculateValueObjectHeight() * 4);
-        valueHeight = valueHeight + calculateValueObjectSpace(calculateValueObjectHeight() * 3);
-        return divideBy2(valueHeight);
-    }
-
-    private int calculateCenterXPos() {
-        return divideBy2(getWidth() - BORDER_WIDTH_X_2);
-    }
-
-    private int calculateCenterYPos() {
-        return divideBy2(getHeight() - BORDER_WIDTH_X_2);
-    }
-
-    private int calculateValueObjectWidth() {
-        return divideBy6(getWidth() - BORDER_WIDTH_X_2);
-    }
-
-    private int calculateValueObjectHeight() {
-        return divideBy6(getHeight() - BORDER_WIDTH_X_2);
-    }
-
-    private int calculateValueObjectSpace(int valueObjectWidthOrHeight) {
-        return divideBy2(valueObjectWidthOrHeight);
+    private Font getValueFontWithCorrectSize(Font baseFont) {
+        float fontSize = (getHeight() / 2.2f) / 10;
+        return baseFont.deriveFont(baseFont.getSize() + fontSize).deriveFont(Font.BOLD);
     }
 
     public boolean isInNormalState() {
@@ -204,13 +157,6 @@ public class GameObjectGuiImpl implements GameObjectGui {
                 && position.getYPos() <= (getYTopLeft() + getHeight());
     }
 
-    private int divideBy2(int number) {
-        return (number / 2);
-    }
-
-    private int divideBy6(int number) {
-        return (number / 6);
-    }
 
     public enum GUIState {NORMAL, MOUSE_OVER}
 

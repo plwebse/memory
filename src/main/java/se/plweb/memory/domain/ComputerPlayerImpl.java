@@ -19,47 +19,58 @@ public class ComputerPlayerImpl implements ComputerPlayer {
     }
 
     public void makeAComputerMove(GameBoard gameBoard) {
+        List<GameObject> gameObjectsToPress = new ArrayList<>(2);
 
-        GameObject firstObjectToPress = visitedGameObjects.stream().findFirst()
-                .orElseGet(() -> findAObjectToPress(gameBoard));
+        gameObjectsToPress.add(
+                visitedGameObjects.stream().findFirst()
+                        .orElseGet(() -> findAObjectToPress(gameBoard)));
 
-        GameObject secondObjectToPress = Optional.ofNullable(getAVisitedGameObjectWithTheSameValue(firstObjectToPress))
-                .orElseGet(() -> findAObjectToPress(gameBoard));
+        gameObjectsToPress.add(
+                getAVisitedGameObjectWithTheSameValue(gameObjectsToPress.get(0))
+                        .orElseGet(() -> findAObjectToPress(gameBoard))
+        );
 
-        addGameObjectToVisitedGameObjectsIfNotAlreadyThere(firstObjectToPress, numberOfPressedGameObjectsToRemember);
-        addGameObjectToVisitedGameObjectsIfNotAlreadyThere(secondObjectToPress, numberOfPressedGameObjectsToRemember);
+        gameObjectsToPress.forEach(
+                gameObject ->
+                        addGameObjectToVisitedGameObjectsIfNotAlreadyThere(gameObject, numberOfPressedGameObjectsToRemember)
+        );
 
-        gameBoard.pressObject(firstObjectToPress);
-        gameBoard.pressObject(secondObjectToPress);
+        gameObjectsToPress.forEach(gameBoard::pressObject);
 
         checkIfThePressObjectsIsAMatchOrNotAndClearsThePressedObjects(
-                gameBoard, firstObjectToPress, secondObjectToPress);
+                gameBoard, gameObjectsToPress
+        );
     }
 
     private GameObject findAObjectToPress(GameBoard gameBoard) {
 
-        GameObject gameObjectToPress = null;
-        while (gameObjectToPress == null) {
+        Optional<GameObject> optionalGameObjectToPress;
+
+        do {
             if (lastIndex >= gameBoard.getPositions().size()) {
                 lastIndex = 0;
             }
 
-            Position position = gameBoard.getPositions().get(lastIndex);
-            gameObjectToPress = Optional.ofNullable(gameBoard.getGameObject(position))
-                    .filter(GameObject::isInNormalState)
-                    .orElse(null);
+            optionalGameObjectToPress = getGameObjectInNormalStateOnGameBoardAtPosition(
+                    gameBoard,
+                    gameBoard.getPositions().get(lastIndex)
+            );
 
             lastIndex++;
-        }
-        return gameObjectToPress;
+        } while (!optionalGameObjectToPress.isPresent());
+
+        return optionalGameObjectToPress.get();
     }
 
-    private GameObject getAVisitedGameObjectWithTheSameValue(GameObject lookForGameObject) {
+    private Optional<GameObject> getGameObjectInNormalStateOnGameBoardAtPosition(GameBoard gameBoard, Position position) {
+        return Optional.ofNullable(gameBoard.getGameObject(position))
+                .filter(GameObject::isInNormalState);
+    }
 
+    private Optional<GameObject> getAVisitedGameObjectWithTheSameValue(GameObject lookForGameObject) {
         return visitedGameObjects.stream()
                 .filter(currentGameObject -> currentGameObject.hasTheSameValueAndNotTheSameCoordinates(lookForGameObject))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     private void addGameObjectToVisitedGameObjectsIfNotAlreadyThere(
@@ -72,15 +83,13 @@ public class ComputerPlayerImpl implements ComputerPlayer {
     }
 
     private void checkIfThePressObjectsIsAMatchOrNotAndClearsThePressedObjects(
-            GameBoard gameBoard, GameObject firstObjectToPress,
-            GameObject secondObjectToPress) {
+            GameBoard gameBoard, List<GameObject> gameObjectsToPress) {
         if (gameBoard.noOfPressedObjectIsCorrect()) {
             if (gameBoard.isAMatch()) {
-                visitedGameObjects.remove(firstObjectToPress);
-                visitedGameObjects.remove(secondObjectToPress);
+                visitedGameObjects.remove(gameObjectsToPress.get(0));
+                visitedGameObjects.remove(gameObjectsToPress.get(1));
             }
             gameBoard.clearPressedObjects();
         }
     }
-
 }
