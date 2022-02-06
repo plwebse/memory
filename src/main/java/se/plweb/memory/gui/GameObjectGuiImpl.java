@@ -75,25 +75,33 @@ public class GameObjectGuiImpl implements GameObjectGui {
 
     private void paintString(Graphics graphics, String sValue) {
         Font currentFont = graphics.getFont();
+        Graphics2D g2d = (Graphics2D) graphics;
 
-        Graphics2D g2d = (Graphics2D) graphics.create();
         g2d.setFont(getValueFontWithCorrectSize(currentFont));
-        FontRenderContext context = g2d.getFontRenderContext();
-        TextLayout txt = new TextLayout(sValue, g2d.getFont(), context);
-        Rectangle2D bounds = txt.getBounds();
 
-        int x = (int) (getWidth() - (bounds.getWidth())) / 2;
-        x = x - (int) bounds.getX();
-        int y = (getHeight() - (int) ((bounds.getHeight() - txt.getDescent()))) / 2;
-        y += txt.getAscent() - txt.getDescent();
+        Point centerOfText = getCenterPointOfText(g2d, sValue);
+        Point center = new Point(xTopLeft + centerOfText.x, yTopLeft + centerOfText.y);
 
-        g2d.drawString(sValue, xTopLeft + x, yTopLeft + y);
+        g2d.drawString(sValue, center.x, center.y);
 
         graphics.setFont(currentFont);
     }
 
+    private Point getCenterPointOfText(Graphics2D g2d, String text) {
+        FontRenderContext context = g2d.getFontRenderContext();
+        TextLayout txt = new TextLayout(text, g2d.getFont(), context);
+        Rectangle2D bounds = txt.getBounds();
+
+        double x = (getWidth() - (bounds.getWidth())) / 2;
+        x = x - bounds.getX();
+        double y = (getHeight() - ((bounds.getHeight() - txt.getDescent()))) / 2;
+        y += txt.getAscent() - txt.getDescent() * 2;
+
+        return new Point((int) x, (int) y);
+    }
+
     private Font getValueFontWithCorrectSize(Font baseFont) {
-        float fontSize = (getHeight() / 2.2f) / 10;
+        float fontSize = (getHeight() / 2.2f);
         return baseFont.deriveFont(baseFont.getSize() + fontSize).deriveFont(Font.BOLD);
     }
 
