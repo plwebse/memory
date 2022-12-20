@@ -20,6 +20,13 @@
 			<url>https://plweb.se</url>
 		</developer>
 	</developers>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/plwebse/memory</url>
+		</repository>
+	</distributionManagement>
 	<build>
 		<plugins>
 			<plugin>
